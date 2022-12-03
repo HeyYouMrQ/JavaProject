@@ -1,16 +1,14 @@
 package view;
 
 
-import chessComponent.ChariotChessComponent;
-import chessComponent.EmptySlotComponent;
-import chessComponent.SoldierChessComponent;
-import chessComponent.SquareComponent;
+import chessComponent.*;
 import model.*;
 import controller.ClickController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -98,28 +96,48 @@ public class Chessboard extends JComponent {
             this.player=player;
         }
     }
-    //FIXME:   Initialize chessboard for testing only.
     private initType[][] initRandomizedChessOnBoard()
     {
         initType[][] ret=new initType[ROW_SIZE][COL_SIZE];
         ArrayList<initType> tmpList=new ArrayList<>();
-        for(int i=0;i<=1;i++)
+        for(int i=0;i<=1;i++)//顺序添加
         {
-            tmp.add()
+            tmpList.add(new initType(0,i));
+            for(int j=0;j<2;j++)    tmpList.add(new initType(1,i));
+            for(int j=0;j<2;j++)    tmpList.add(new initType(2,i));
+            for(int j=0;j<2;j++)    tmpList.add(new initType(3,i));
+            for(int j=0;j<2;j++)    tmpList.add(new initType(4,i));
+            for(int j=0;j<5;j++)    tmpList.add(new initType(5,i));
+            for(int j=0;j<2;j++)    tmpList.add(new initType(6,i));
         }
+        System.out.println(tmpList.size());
+        Collections.shuffle(tmpList);
+        for(int i=0;i<ROW_SIZE;i++)
+            for(int j=0;j<COL_SIZE;j++)
+                ret[i][j]=tmpList.get(i*COL_SIZE+j);
+        return ret;
     }
     private void initAllChessOnBoard() {
         Random random = new Random();
         initType[][] randomizedComponents=initRandomizedChessOnBoard();
         for (int i = 0; i < squareComponents.length; i++) {
             for (int j = 0; j < squareComponents[i].length; j++) {
-                ChessColor color = random.nextInt(2) == 0 ? ChessColor.RED : ChessColor.BLACK;
+                ChessColor color=randomizedComponents[i][j].player==0? ChessColor.RED : ChessColor.BLACK;
                 SquareComponent squareComponent;
-                if (random.nextInt(2) == 0) {
+                if (randomizedComponents[i][j].chessType == 0)//0-6:将士相车马兵炮
+                    squareComponent = new GeneralChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
+                else if(randomizedComponents[i][j].chessType == 1)
+                    squareComponent = new AdvisorChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
+                else if(randomizedComponents[i][j].chessType == 2)
+                    squareComponent = new MinisterChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
+                else if(randomizedComponents[i][j].chessType == 3)
                     squareComponent = new ChariotChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                } else {
+                else if(randomizedComponents[i][j].chessType == 4)
+                    squareComponent = new HorseChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
+                else if(randomizedComponents[i][j].chessType == 5)
                     squareComponent = new SoldierChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                }
+                else //==6
+                    squareComponent = new CannonChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
                 squareComponent.setVisible(true);
                 putChessOnBoard(squareComponent);
             }
