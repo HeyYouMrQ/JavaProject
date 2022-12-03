@@ -7,6 +7,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             ChessGameFrame mainFrame = new ChessGameFrame(720, 720);
             mainFrame.setVisible(true);
+            int sad;
         });
     }
 }
