@@ -16,5 +16,33 @@ public class CannonChessComponent extends ChessComponent {
             name = "砲";
         }
     }
-
+    private boolean cannonCanMoveTo(SquareComponent[][] chessboard,ChessboardPoint destination)//todo revise!
+    {
+        if(destination.getX()!=this.getChessboardPoint().getX() && destination.getY()!=this.getChessboardPoint().getY()) return false;
+        int cntNoneEmpty=0;
+        if(destination.getX()==this.getChessboardPoint().getX())
+        {
+            for(int i=Math.min(destination.getY(),this.getChessboardPoint().getY())+1;i<=Math.max(destination.getY(),this.getChessboardPoint().getY())-1;i++)
+            {
+                if(!(chessboard[this.getChessboardPoint().getX()][i] instanceof EmptySlotComponent))
+                    cntNoneEmpty++;
+            }
+        }
+        else if(destination.getY()==this.getChessboardPoint().getY())
+        {
+            for(int i=Math.min(destination.getX(),this.getChessboardPoint().getX())+1;i<=Math.max(destination.getX(),this.getChessboardPoint().getX())-1;i++)
+            {
+                if(!(chessboard[i][this.getChessboardPoint().getY()] instanceof EmptySlotComponent))
+                    cntNoneEmpty++;
+            }
+        }
+        if(cntNoneEmpty==1) return true;
+        else return false;
+    }
+    @Override
+    public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
+        SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
+        return (!(destinationChess instanceof EmptySlotComponent)) && cannonCanMoveTo(chessboard,destination);
+        //todo: complete this method
+    }
 }

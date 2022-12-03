@@ -1,6 +1,7 @@
 package controller;
 
 
+import chessComponent.CannonChessComponent;
 import chessComponent.SquareComponent;
 import chessComponent.EmptySlotComponent;
 import model.ChessColor;
@@ -71,8 +72,11 @@ public class ClickController {
                 return false;
             }
         }
-        return squareComponent.getChessColor() != chessboard.getCurrentColor() &&
-                first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint());
+        return (    ((squareComponent instanceof CannonChessComponent) &&
+                        first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint()))     ||
+                    ( !(squareComponent instanceof CannonChessComponent) &&
+                        squareComponent.getChessColor() != chessboard.getCurrentColor() &&//todo 这里改了源码
+                        first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint()))     );
     }
 
     public void swapPlayer() {

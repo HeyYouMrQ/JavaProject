@@ -30,7 +30,7 @@ public abstract class SquareComponent extends JComponent {
     protected final ChessColor chessColor;
     protected boolean isReversal;
     private boolean selected;
-
+    protected int hierarchy;//非空棋子才有意义，General>Advisor>Minister>Chariot>Horse>Soldier(5->0)
     /**
      * handle click event
      */
@@ -117,7 +117,16 @@ public abstract class SquareComponent extends JComponent {
     //todo: Override this method for Cannon
     public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
         SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
-        return destinationChess.isReversal|| destinationChess instanceof EmptySlotComponent;
+        if(destination.getX()!=this.getChessboardPoint().getX() && destination.getY()!=this.getChessboardPoint().getY()) return false;
+        if(destination.getX()==this.getChessboardPoint().getX()
+                && Math.min(destination.getY(),this.getChessboardPoint().getY())!=Math.max(destination.getY(),this.getChessboardPoint().getY())-1)
+            return false;
+        else if(destination.getY()==this.getChessboardPoint().getY()
+                && Math.min(destination.getX(),this.getChessboardPoint().getX())!=Math.max(destination.getX(),this.getChessboardPoint().getX())-1)
+            return false;
+        return (destinationChess.isReversal
+                && ((this.hierarchy>=destinationChess.hierarchy) || (this.hierarchy==0 && destinationChess.hierarchy==5)) )
+                || destinationChess instanceof EmptySlotComponent;
         //todo: complete this method
     }
 

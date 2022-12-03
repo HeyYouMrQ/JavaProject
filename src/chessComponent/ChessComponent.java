@@ -11,9 +11,15 @@ import java.awt.*;
  */
 public class ChessComponent extends SquareComponent{
     protected String name;// 棋子名字：例如 兵，卒，士等
-
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         super(chessboardPoint, location, chessColor, clickController, size);
+        if(this instanceof GeneralChessComponent)   this.hierarchy=5;
+        else if(this instanceof AdvisorChessComponent)   this.hierarchy=4;
+        else if(this instanceof MinisterChessComponent)   this.hierarchy=3;
+        else if(this instanceof ChariotChessComponent)   this.hierarchy=2;
+        else if(this instanceof HorseChessComponent)   this.hierarchy=1;
+        else if(this instanceof CannonChessComponent)   this.hierarchy=1;
+        else if(this instanceof SoldierChessComponent)   this.hierarchy=0;
     }
     @Override
     protected void paintComponent(Graphics g) {
