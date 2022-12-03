@@ -10,6 +10,7 @@ import controller.ClickController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -88,10 +89,28 @@ public class Chessboard extends JComponent {
         chess2.repaint();
     }
 
-
+    private class initType
+    {
+        public int chessType,player;//前者0-6:将士相车马兵炮;后者0-1:红黑
+        public initType(int chessType,int player)
+        {
+            this.chessType=chessType;
+            this.player=player;
+        }
+    }
     //FIXME:   Initialize chessboard for testing only.
+    private initType[][] initRandomizedChessOnBoard()
+    {
+        initType[][] ret=new initType[ROW_SIZE][COL_SIZE];
+        ArrayList<initType> tmpList=new ArrayList<>();
+        for(int i=0;i<=1;i++)
+        {
+            tmp.add()
+        }
+    }
     private void initAllChessOnBoard() {
         Random random = new Random();
+        initType[][] randomizedComponents=initRandomizedChessOnBoard();
         for (int i = 0; i < squareComponents.length; i++) {
             for (int j = 0; j < squareComponents[i].length; j++) {
                 ChessColor color = random.nextInt(2) == 0 ? ChessColor.RED : ChessColor.BLACK;
