@@ -33,6 +33,7 @@ public class ChessGameFrame extends JFrame {
         addChessboard();
         addLabel();
         addHelloButton();
+        addRestartButton();//todo
         addLoadButton();
     }
 
@@ -54,7 +55,7 @@ public class ChessGameFrame extends JFrame {
         statusLabel = new JLabel("BLACK's TURN");
         statusLabel.setLocation(WIDTH * 3 / 5, HEIGHT / 10);
         statusLabel.setSize(200, 60);
-        statusLabel.setFont(new Font("Rockwell", Font.BOLD, 20));
+        statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         add(statusLabel);
     }
 
@@ -66,21 +67,29 @@ public class ChessGameFrame extends JFrame {
      * 在游戏窗体中增加一个按钮，如果按下的话就会显示Hello, world!
      */
 
-    private void addHelloButton() {
+    private void addHelloButton() {//todo
         JButton button = new JButton("Show Hello Here");
         button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
         button.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 120);
         button.setSize(180, 60);
-        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        button.setFont(new Font("宋体", Font.BOLD, 20));
         add(button);
     }
-
-
+    private void addRestartButton() {//todo
+        JButton button = new JButton("RESTART");
+        button.addActionListener((e) -> {
+                    ChessGameFrame mainFrame = new ChessGameFrame(720, 720);
+                    mainFrame.setVisible(true);});
+        button.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 420);
+        button.setSize(180, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        add(button);
+    }
     private void addLoadButton() {
         JButton button = new JButton("Load");
         button.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 240);
         button.setSize(180, 60);
-        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        button.setFont(new Font("宋体", Font.BOLD, 20));
         button.setBackground(Color.LIGHT_GRAY);
         add(button);
 
