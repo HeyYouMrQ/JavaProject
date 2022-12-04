@@ -64,18 +64,17 @@ public class ClickController {
      */
 
     private boolean handleSecond(SquareComponent squareComponent) {
-
-        //没翻开或空棋子，进入if
-        if (!squareComponent.isReversal()) {
-            //没翻开且非空棋子不能走
-            if (!(squareComponent instanceof EmptySlotComponent)) {
+        //todo 这里改了源码
+        //空棋子的isReversal是false！
+        //1.没翻开 且2.非空棋子 且3.first棋子不为炮 则不能走
+        if (!squareComponent.isReversal() && !(first instanceof CannonChessComponent)
+                && !(squareComponent instanceof EmptySlotComponent)) {
                 return false;
-            }
         }
-        return (    ((squareComponent instanceof CannonChessComponent) &&
+        return (    ((first instanceof CannonChessComponent) &&
                         first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint()))     ||
-                    ( !(squareComponent instanceof CannonChessComponent) &&
-                        squareComponent.getChessColor() != chessboard.getCurrentColor() &&//todo 这里改了源码
+                    ( !(first instanceof CannonChessComponent) &&
+                        squareComponent.getChessColor() != chessboard.getCurrentColor() &&
                         first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint()))     );
     }
 

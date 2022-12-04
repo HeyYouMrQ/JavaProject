@@ -9,4 +9,4 @@ public class Main {
             mainFrame.setVisible(true);
         });
     }
-}//bug：炮不能吃没翻开的棋子？但我已经改了源码了呀？
+}//bug：暂无
