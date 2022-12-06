@@ -15,6 +15,7 @@ public class GeneralChessComponent extends ChessComponent {
         } else {
             name = "將";
         }
+        super.score=30;
     }
 
 }

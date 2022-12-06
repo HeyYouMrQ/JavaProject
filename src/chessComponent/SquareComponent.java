@@ -1,8 +1,10 @@
 package chessComponent;
 
 import controller.ClickController;
+import controller.GameController;
 import model.ChessColor;
 import model.ChessboardPoint;
+import view.Chessboard;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +20,8 @@ public abstract class SquareComponent extends JComponent {
 
     private static final Color squareColor = new Color(250, 220, 190);
     protected static int spacingLength;
-    protected static final Font CHESS_FONT = new Font("Rockwell", Font.BOLD, 36);
-
+    protected static final Font CHESS_FONT = new Font("宋体", Font.BOLD, 36);
+    protected int score;
     /**
      * chessboardPoint: 表示8*4棋盘中，当前棋子在棋格对应的位置，如(0, 0), (1, 0)等等
      * chessColor: 表示这个棋子的颜色，有红色，黑色，无色三种
@@ -118,13 +120,14 @@ public abstract class SquareComponent extends JComponent {
     public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
         SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
         if(destination.getX()!=this.getChessboardPoint().getX() && destination.getY()!=this.getChessboardPoint().getY()) return false;
+
         if(destination.getX()==this.getChessboardPoint().getX()
                 && Math.min(destination.getY(),this.getChessboardPoint().getY())!=Math.max(destination.getY(),this.getChessboardPoint().getY())-1)
             return false;
         else if(destination.getY()==this.getChessboardPoint().getY()
                 && Math.min(destination.getX(),this.getChessboardPoint().getX())!=Math.max(destination.getX(),this.getChessboardPoint().getX())-1)
             return false;
-        return (destinationChess.isReversal
+        return (destinationChess.isReversal && destinationChess.getChessColor() != Chessboard.getCurrentColor()
                 && ((this.hierarchy>=destinationChess.hierarchy) || (this.hierarchy==0 && destinationChess.hierarchy==5)) )
                 || destinationChess instanceof EmptySlotComponent;
         //todo: complete this method
@@ -137,5 +140,11 @@ public abstract class SquareComponent extends JComponent {
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
         g.setColor(squareColor);
         g.fillRect(1, 1, this.getWidth() - 2, this.getHeight() - 2);
+    }
+    public void addScoreToPlayer(SquareComponent squareComponent) {//todo
+        if(squareComponent.chessColor.getColor()==Color.BLACK)
+            Chessboard.redPlayer.setCurrentScore(Chessboard.redPlayer.getCurrentScore()+squareComponent.score);
+        else
+            Chessboard.blackPlayer.setCurrentScore(Chessboard.blackPlayer.getCurrentScore()+squareComponent.score);
     }
 }

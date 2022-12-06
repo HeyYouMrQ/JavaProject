@@ -3,6 +3,7 @@ package chessComponent;
 import controller.ClickController;
 import model.ChessColor;
 import model.ChessboardPoint;
+import view.Chessboard;
 
 import java.awt.*;
 
@@ -15,8 +16,9 @@ public class CannonChessComponent extends ChessComponent {
         } else {
             name = "砲";
         }
+        super.score=5;
     }
-    private boolean cannonCanMoveTo(SquareComponent[][] chessboard,ChessboardPoint destination)//todo revise!
+    private boolean screenOK(SquareComponent[][] chessboard,ChessboardPoint destination)
     {
         if(destination.getX()!=this.getChessboardPoint().getX() && destination.getY()!=this.getChessboardPoint().getY()) return false;
         int cntNoneEmpty=0;
@@ -42,7 +44,11 @@ public class CannonChessComponent extends ChessComponent {
     @Override
     public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
         SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
-        return (!(destinationChess instanceof EmptySlotComponent)) && cannonCanMoveTo(chessboard,destination);
+        if(! destinationChess.isReversal)
+            return (!(destinationChess instanceof EmptySlotComponent)) && screenOK(chessboard,destination);
+        else//翻开了
+            return (!(destinationChess instanceof EmptySlotComponent)) && screenOK(chessboard,destination)
+                    && destinationChess.getChessColor() != Chessboard.getCurrentColor();
         //todo: complete this method
     }
 }

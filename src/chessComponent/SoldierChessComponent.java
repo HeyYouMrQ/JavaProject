@@ -15,6 +15,7 @@ public class SoldierChessComponent extends ChessComponent {
         } else {
             name = "卒";
         }
+        super.score=1;
     }
 
 }

@@ -4,6 +4,7 @@ package view;
 import chessComponent.*;
 import model.*;
 import controller.ClickController;
+import player.Players;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,13 +25,12 @@ public class Chessboard extends JComponent {
 
     private final SquareComponent[][] squareComponents = new SquareComponent[ROW_SIZE][COL_SIZE];
     //todo: you can change the initial player
-    private ChessColor currentColor = ChessColor.BLACK;
+    private static ChessColor currentColor = ChessColor.BLACK;
 
     //all chessComponents in this chessboard are shared only one model controller
     public final ClickController clickController = new ClickController(this);
     private final int CHESS_SIZE;
-
-
+    public static Players redPlayer=new Players(Color.RED),blackPlayer=new Players(Color.BLACK);
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
         setSize(width + 2, height);
@@ -45,12 +45,12 @@ public class Chessboard extends JComponent {
         return squareComponents;
     }
 
-    public ChessColor getCurrentColor() {
+    public static ChessColor getCurrentColor() {
         return currentColor;
     }
 
-    public void setCurrentColor(ChessColor currentColor) {
-        this.currentColor = currentColor;
+    public  static void setCurrentColor(ChessColor cC) {
+        currentColor = cC;
     }
 
     /**
@@ -170,7 +170,7 @@ public class Chessboard extends JComponent {
      * 通过GameController调用该方法
      * @param chessData
      */
-    public void loadGame(List<String> chessData) {
+    public void loadGame(List<String> chessData) {//todo
         chessData.forEach(System.out::println);
     }
 }
