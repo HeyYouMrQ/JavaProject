@@ -17,7 +17,21 @@ public class ChessGameFrame extends JFrame {
     public final int CHESSBOARD_SIZE;
     private GameController gameController;
     private static JLabel statusLabel;
+    private static JLabel scoreOfBlack;
+    private static JLabel scoreOfRed;
 
+    @Override
+    public Container getContentPane() {
+        return super.getContentPane();
+    }
+
+    public static JLabel getScoreOfBlack() {
+        return scoreOfBlack;
+    }
+
+    public static JLabel getScoreOfRed() {
+        return scoreOfRed;
+    }
     public ChessGameFrame(int width, int height) {
         setTitle("2022 CS109 Project Demo"); //设置标题
         this.WIDTH = width;
@@ -32,11 +46,10 @@ public class ChessGameFrame extends JFrame {
 
         addChessboard();
         addLabel();
-        addHelloButton();
+    //    addHelloButton();
         addRestartButton();//todo
         addLoadButton();
     }
-
 
     /**
      * 在游戏窗体中添加棋盘
@@ -57,6 +70,19 @@ public class ChessGameFrame extends JFrame {
         statusLabel.setSize(200, 60);
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         add(statusLabel);
+
+        scoreOfBlack = new JLabel(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
+        scoreOfBlack.setLocation(WIDTH * 3 / 5, HEIGHT *2/ 10);
+        scoreOfBlack.setSize(200, 60);
+        scoreOfBlack.setFont(new Font("宋体", Font.BOLD, 20));
+        add(scoreOfBlack);
+
+        scoreOfRed = new JLabel(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
+        scoreOfRed.setLocation(WIDTH * 3 / 5, HEIGHT *3/ 10);
+        scoreOfRed.setSize(200, 60);
+        scoreOfRed.setFont(new Font("宋体", Font.BOLD, 20));
+        add(scoreOfRed);
+
     }
 
     public static JLabel getStatusLabel() {
@@ -67,19 +93,21 @@ public class ChessGameFrame extends JFrame {
      * 在游戏窗体中增加一个按钮，如果按下的话就会显示Hello, world!
      */
 
-    private void addHelloButton() {//todo
+/*    private void addHelloButton() {//todo
         JButton button = new JButton("Show Hello Here");
         button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
         button.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 120);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         add(button);
-    }
+    }*/
     private void addRestartButton() {//todo
         JButton button = new JButton("RESTART");
         button.addActionListener((e) -> {
-                    ChessGameFrame mainFrame = new ChessGameFrame(720, 720);
-                    mainFrame.setVisible(true);});
+            ChessGameFrame mainFrame = new ChessGameFrame(720, 720);
+            SwingUtilities.invokeLater(() -> {mainFrame.setVisible(true);mainFrame.setVisible(false);});
+
+        });
         button.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 420);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
@@ -98,8 +126,6 @@ public class ChessGameFrame extends JFrame {
             String path = JOptionPane.showInputDialog(this, "Input Path here");
             gameController.loadGameFromFile(path);
         });
-
-
     }
 
 }

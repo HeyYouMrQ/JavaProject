@@ -15,6 +15,7 @@ public class HorseChessComponent extends ChessComponent {
         } else {
             name = "馬";
         }
+        super.score=5;
     }
 
 }

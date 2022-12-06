@@ -15,6 +15,7 @@ public class MinisterChessComponent extends ChessComponent {
         } else {
             name = "象";
         }
+        super.score=5;
     }
 
 }
