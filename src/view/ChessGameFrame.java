@@ -206,7 +206,7 @@ public class ChessGameFrame extends JFrame {
             else
                 secChess.setReversal(true);
 
-            if(firCol.peek()==1)
+            if(secCol.peek()==0)
                 Chessboard.redPlayer.setCurrentScore(Chessboard.redPlayer.getCurrentScore()-secChess.score);
             else
                 Chessboard.blackPlayer.setCurrentScore(Chessboard.blackPlayer.getCurrentScore()-secChess.score);

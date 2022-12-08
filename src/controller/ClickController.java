@@ -29,7 +29,7 @@ public class ClickController {
     public void recordWithdraw(SquareComponent fir,SquareComponent sec,int rev)
     {
         ope.push(2);
-        firCom.push(fir.label);/*0-6:将士相车马兵炮 7:空 */  firCol.push(fir.getChessColor()==ChessColor.BLACK?0:1);//0黑1红
+        firCom.push(fir.label);/*0-6:将士相车马兵炮 7:空 */  firCol.push(fir.getChessColor().equals(ChessColor.BLACK)?0:1);//0黑1红
         firX.push(fir.getChessboardPoint().getX()); firY.push(fir.getChessboardPoint().getY());
         secCom.push(sec.label);   secCol.push(sec.getChessColor().equals(ChessColor.BLACK)?0:1);
         secX.push(sec.getChessboardPoint().getX()); secY.push(sec.getChessboardPoint().getY());
