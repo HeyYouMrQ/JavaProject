@@ -19,6 +19,7 @@ public class ChariotChessComponent extends ChessComponent {
             name = "車";
         }
         super.score=5;
+        super.label=3;
     }
 
 }

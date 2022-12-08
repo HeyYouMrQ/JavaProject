@@ -16,6 +16,7 @@ public class AdvisorChessComponent extends ChessComponent {
             name = "士";
         }
         super.score=10;
+        super.label=1;
     }
 
 }

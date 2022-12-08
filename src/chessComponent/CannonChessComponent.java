@@ -17,6 +17,7 @@ public class CannonChessComponent extends ChessComponent {
             name = "砲";
         }
         super.score=5;
+        super.label=6;
     }
     private boolean screenOK(SquareComponent[][] chessboard,ChessboardPoint destination)
     {

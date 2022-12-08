@@ -14,6 +14,7 @@ public class EmptySlotComponent extends SquareComponent {
     public EmptySlotComponent(ChessboardPoint chessboardPoint, Point location, ClickController listener, int size) {
         super(chessboardPoint, location, ChessColor.NONE, listener, size);
         super.score=0;
+        super.label=7;
     }
 
     @Override

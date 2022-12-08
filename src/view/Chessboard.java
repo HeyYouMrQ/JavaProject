@@ -8,10 +8,10 @@ import player.Players;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
+
+import static view.ChessGameFrame.*;
 
 /**
  * 这个类表示棋盘组建，其包含：
@@ -19,18 +19,18 @@ import java.util.Random;
  */
 public class Chessboard extends JComponent {
 
-
     private static final int ROW_SIZE = 8;
     private static final int COL_SIZE = 4;
 
     private final SquareComponent[][] squareComponents = new SquareComponent[ROW_SIZE][COL_SIZE];
-    //todo: you can change the initial player
-    private static ChessColor currentColor = ChessColor.BLACK;
-
-    //all chessComponents in this chessboard are shared only one model controller
     public final ClickController clickController = new ClickController(this);
-    private final int CHESS_SIZE;
+    public final int CHESS_SIZE;
+    //todo: you can change the initial player
+    //all chessComponents in this chessboard are shared only one model controller
+
+    private static ChessColor currentColor;
     public static Players redPlayer=new Players(Color.RED),blackPlayer=new Players(Color.BLACK);
+
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
         setSize(width + 2, height);
@@ -117,12 +117,22 @@ public class Chessboard extends JComponent {
                 ret[i][j]=tmpList.get(i*COL_SIZE+j);
         return ret;
     }
-    private void initAllChessOnBoard() {
-        Random random = new Random();
+    public void initAllChessOnBoard() {
+        ope.clear();
+        firCom.clear();   firCol.clear();   firX.clear(); firY.clear();
+        secCom.clear();   secCol.clear();   secX.clear(); secY.clear();
+        firCannonSecRev.clear();
+        currentColor = ChessColor.BLACK;
+        redPlayer.setCurrentScore(0);
+        blackPlayer.setCurrentScore(0);
+        ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
+        ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
+        ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
+
         initType[][] randomizedComponents=initRandomizedChessOnBoard();
         for (int i = 0; i < squareComponents.length; i++) {
             for (int j = 0; j < squareComponents[i].length; j++) {
-                ChessColor color=randomizedComponents[i][j].player==0? ChessColor.RED : ChessColor.BLACK;
+                ChessColor color=randomizedComponents[i][j].player==0? ChessColor.BLACK : ChessColor.RED;//0黑1红
                 SquareComponent squareComponent;
                 if (randomizedComponents[i][j].chessType == 0)//0-6:将士相车马兵炮
                     squareComponent = new GeneralChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
@@ -142,9 +152,7 @@ public class Chessboard extends JComponent {
                 putChessOnBoard(squareComponent);
             }
         }
-
     }
-
     /**
      * 绘制棋盘格子
      * @param g
@@ -155,17 +163,15 @@ public class Chessboard extends JComponent {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
-
     /**
      * 将棋盘上行列坐标映射成Swing组件的Point
      * @param row 棋盘上的行
      * @param col 棋盘上的列
      * @return
      */
-    private Point calculatePoint(int row, int col) {
+    public Point calculatePoint(int row, int col) {
         return new Point(col * CHESS_SIZE + 3, row * CHESS_SIZE + 3);
     }
-
     /**
      * 通过GameController调用该方法
      * @param chessData

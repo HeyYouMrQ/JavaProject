@@ -1,7 +1,6 @@
 package chessComponent;
 
 import controller.ClickController;
-import controller.GameController;
 import model.ChessColor;
 import model.ChessboardPoint;
 import view.Chessboard;
@@ -21,7 +20,8 @@ public abstract class SquareComponent extends JComponent {
     private static final Color squareColor = new Color(250, 220, 190);
     protected static int spacingLength;
     protected static final Font CHESS_FONT = new Font("宋体", Font.BOLD, 36);
-    protected int score;
+    public int score;
+    public int label;//0-6:将士相车马兵炮 7:空
     /**
      * chessboardPoint: 表示8*4棋盘中，当前棋子在棋格对应的位置，如(0, 0), (1, 0)等等
      * chessColor: 表示这个棋子的颜色，有红色，黑色，无色三种
@@ -29,7 +29,7 @@ public abstract class SquareComponent extends JComponent {
      * selected: 表示这个棋子是否被选中
      */
     private ChessboardPoint chessboardPoint;
-    protected final ChessColor chessColor;
+    private final ChessColor chessColor;
     protected boolean isReversal;
     private boolean selected;
     protected int hierarchy;//非空棋子才有意义，General>Advisor>Minister>Chariot>Horse>Soldier(5->0)
