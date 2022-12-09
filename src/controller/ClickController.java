@@ -40,6 +40,12 @@ public class ClickController {
             firCannonSecRev.push(0);
         withdrawButton.setEnabled(true);
     }
+    public boolean canChangeCursor(SquareComponent squareComponent)//todo 加的
+    {
+        if(first!=null && handleSecond(squareComponent))
+            return true;
+        return false;
+    }
     public void onClick(SquareComponent squareComponent) {
         if(first==null)
         {
@@ -68,7 +74,7 @@ public class ClickController {
             }
             else if (handleSecond(squareComponent))
             {//能吃的、能移动到空格子的就做
-                if(squareComponent.isReversal()==false)
+                if(!squareComponent.isReversal())
                     recordWithdraw(first,squareComponent,1);
                 else
                     recordWithdraw(first,squareComponent,0);

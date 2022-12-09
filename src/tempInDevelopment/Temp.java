@@ -9,6 +9,7 @@ public class Temp {
     {
     /*    JFrame j1=new JFrame(string);
         j1.setCursor(new Cursor(Cursor.HAND_CURSOR));//其实像JFrame这样的AbstractButton的子类都可以
+        mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR)); 可以用来人机、联机时使用
         j1.setIconImage();
         JButton j2=new JButton(icon或string或都有都可以);
         j2.setIcon(……);
