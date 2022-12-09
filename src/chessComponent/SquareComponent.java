@@ -109,13 +109,17 @@ public abstract class SquareComponent extends JComponent {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             clickController.onClick(this);
         }
-        if (isCheatingMode && !(this instanceof EmptySlotComponent) && e.getID() == MouseEvent.MOUSE_ENTERED) {//todo 加的，源码没有
-            isReversalInCheatingMode=true;
+        if (e.getID() == MouseEvent.MOUSE_ENTERED && !(this instanceof EmptySlotComponent)) {//todo 加的，源码没有
+            if(isCheatingMode)
+                isReversalInCheatingMode=true;
             this.repaint();
+            if(clickController.canChangeCursor(this))
+                this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
-        if (isCheatingMode && !(this instanceof EmptySlotComponent) && e.getID() == MouseEvent.MOUSE_EXITED) {//todo 加的，源码没有
+        if (!(this instanceof EmptySlotComponent) && e.getID() == MouseEvent.MOUSE_EXITED) {//todo 加的，源码没有
             isReversalInCheatingMode=false;
             this.repaint();
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
