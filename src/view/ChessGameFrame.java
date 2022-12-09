@@ -27,7 +27,7 @@ public class ChessGameFrame extends JFrame {
     public static Chessboard chessboard;
     public static Stack<Integer> ope=new Stack<>(),firCom=new Stack<>(),firCol=new Stack<>(),firX=new Stack<>(),firY=new Stack<>()
             ,secCom=new Stack<>(),secCol=new Stack<>(),secX=new Stack<>(),secY=new Stack<>(),firCannonSecRev=new Stack<>();//ope=1,翻棋子,仅用fir;=2,走棋子,fir与sec都用;
-    // firCannonSecRev若first为炮吃了未翻开的棋子，则为true
+    // firCannonSecRev若first为炮吃了未翻开的棋子，则为1
     @Override
     public Container getContentPane() {
         return super.getContentPane();
@@ -199,7 +199,6 @@ public class ChessGameFrame extends JFrame {
             chessboard.putChessOnBoard(firChess);
             chessboard.putChessOnBoard(secChess);
 
-            Chessboard.setCurrentColor(Chessboard.getCurrentColor()==ChessColor.RED?ChessColor.BLACK:ChessColor.RED);
             firChess.setReversal(true);
             if(firCannonSecRev.peek()==1)
                 secChess.setReversal(false);
@@ -210,10 +209,11 @@ public class ChessGameFrame extends JFrame {
                 Chessboard.redPlayer.setCurrentScore(Chessboard.redPlayer.getCurrentScore()-secChess.score);
             else
                 Chessboard.blackPlayer.setCurrentScore(Chessboard.blackPlayer.getCurrentScore()-secChess.score);
-            ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
             ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
             ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
         }
+        Chessboard.setCurrentColor(Chessboard.getCurrentColor()==ChessColor.RED?ChessColor.BLACK:ChessColor.RED);
+        ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
         ope.pop();
         firCom.pop();   firCol.pop();   firX.pop(); firY.pop();
         secCom.pop();   secCol.pop();   secX.pop(); secY.pop(); firCannonSecRev.pop();
