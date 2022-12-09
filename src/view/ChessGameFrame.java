@@ -7,7 +7,7 @@ import model.ChessboardPoint;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Stack;
+import static view.Chessboard.*;
 
 /**
  * 这个类表示游戏窗体，窗体上包含：
@@ -25,9 +25,7 @@ public class ChessGameFrame extends JFrame {
     private static JLabel scoreOfBlack;
     private static JLabel scoreOfRed;
     public static Chessboard chessboard;
-    public static Stack<Integer> ope=new Stack<>(),firCom=new Stack<>(),firCol=new Stack<>(),firX=new Stack<>(),firY=new Stack<>()
-            ,secCom=new Stack<>(),secCol=new Stack<>(),secX=new Stack<>(),secY=new Stack<>(),firCannonSecRev=new Stack<>();//ope=1,翻棋子,仅用fir;=2,走棋子,fir与sec都用;
-    // firCannonSecRev若first为炮吃了未翻开的棋子，则为1
+
     @Override
     public Container getContentPane() {
         return super.getContentPane();
@@ -120,18 +118,19 @@ public class ChessGameFrame extends JFrame {
         button.setFont(new Font("宋体", Font.BOLD, 20));
         add(button);
     }
+
     public static JButton cheatingButton = new JButton("Cheating Mode: OFF");
     private void addCheatingModeButton() {//todo
         cheatingButton.addActionListener((e) -> {
             if(cheatingButton.getText().equals("Cheating Mode: OFF")) {
                 cheatingButton.setText("Cheating Mode: ON");
                 cheatingButton.repaint();
-                //todo
+                isCheatingMode=true;
             }
             else {
                 cheatingButton.setText("Cheating Mode: OFF");
                 cheatingButton.repaint();
-                //todo
+                isCheatingMode=false;
             }
         });
         cheatingButton.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 320);
@@ -212,7 +211,7 @@ public class ChessGameFrame extends JFrame {
             ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
             ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
         }
-        Chessboard.setCurrentColor(Chessboard.getCurrentColor()==ChessColor.RED?ChessColor.BLACK:ChessColor.RED);
+        Chessboard.setCurrentColor(Chessboard.getCurrentColor().equals(ChessColor.RED)?ChessColor.BLACK:ChessColor.RED);
         ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
         ope.pop();
         firCom.pop();   firCol.pop();   firX.pop(); firY.pop();

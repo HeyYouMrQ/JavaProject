@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
+import static view.Chessboard.isCheatingMode;
 /**
  * 这个类是一个抽象类，主要表示8*4棋盘上每个格子的棋子情况。
  * 有两个子类：
@@ -20,8 +21,6 @@ public abstract class SquareComponent extends JComponent {
     private static final Color squareColor = new Color(250, 220, 190);
     protected static int spacingLength;
     protected static final Font CHESS_FONT = new Font("宋体", Font.BOLD, 36);
-    public int score;
-    public int label;//0-6:将士相车马兵炮 7:空
     /**
      * chessboardPoint: 表示8*4棋盘中，当前棋子在棋格对应的位置，如(0, 0), (1, 0)等等
      * chessColor: 表示这个棋子的颜色，有红色，黑色，无色三种
@@ -32,7 +31,11 @@ public abstract class SquareComponent extends JComponent {
     private final ChessColor chessColor;
     protected boolean isReversal;
     private boolean selected;
+
     protected int hierarchy;//非空棋子才有意义，General>Advisor>Minister>Chariot>Horse>Soldier(5->0)
+    public int score;
+    public int label;//0-6:将士相车马兵炮 7:空
+    public boolean isReversalInCheatingMode=false;
     /**
      * handle click event
      */
@@ -94,18 +97,25 @@ public abstract class SquareComponent extends JComponent {
         another.setChessboardPoint(chessboardPoint1);
         another.setLocation(point1);
     }
-
     /**
      * @param e 响应鼠标监听事件
      *          <br>
      *          当接收到鼠标动作的时候，这个方法就会自动被调用，调用监听者的onClick方法，处理棋子的选中，移动等等行为。
      */
     @Override
-    protected void processMouseEvent(MouseEvent e) {
+    protected void processMouseEvent(MouseEvent e) {//哇，这个好好用
         super.processMouseEvent(e);
         if (e.getID() == MouseEvent.MOUSE_PRESSED) {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             clickController.onClick(this);
+        }
+        if (isCheatingMode && !(this instanceof EmptySlotComponent) && e.getID() == MouseEvent.MOUSE_ENTERED) {//todo 加的，源码没有
+            isReversalInCheatingMode=true;
+            this.repaint();
+        }
+        if (isCheatingMode && !(this instanceof EmptySlotComponent) && e.getID() == MouseEvent.MOUSE_EXITED) {//todo 加的，源码没有
+            isReversalInCheatingMode=false;
+            this.repaint();
         }
     }
 

@@ -2,16 +2,17 @@ package view;
 
 
 import chessComponent.*;
-import model.*;
 import controller.ClickController;
+import model.ChessColor;
+import model.ChessboardPoint;
 import player.Players;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import static view.ChessGameFrame.*;
+import java.util.Stack;
 
 /**
  * 这个类表示棋盘组建，其包含：
@@ -30,7 +31,10 @@ public class Chessboard extends JComponent {
 
     private static ChessColor currentColor;
     public static Players redPlayer=new Players(Color.RED),blackPlayer=new Players(Color.BLACK);
-
+    public static Stack<Integer> ope=new Stack<>(),firCom=new Stack<>(),firCol=new Stack<>(),firX=new Stack<>(),firY=new Stack<>()
+            ,secCom=new Stack<>(),secCol=new Stack<>(),secX=new Stack<>(),secY=new Stack<>(),firCannonSecRev=new Stack<>();//ope=1,翻棋子,仅用fir;=2,走棋子,fir与sec都用;
+    // firCannonSecRev若first为炮吃了未翻开的棋子，则为1
+    public static boolean isCheatingMode=false;
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
         setSize(width + 2, height);

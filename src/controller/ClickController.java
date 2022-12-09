@@ -10,7 +10,8 @@ import view.Chessboard;
 import javax.swing.*;
 import java.awt.*;
 
-import static view.ChessGameFrame.*;
+import static view.ChessGameFrame.withdrawButton;
+import static view.Chessboard.*;
 
 public class ClickController {
     private final Chessboard chessboard;
@@ -50,7 +51,7 @@ public class ClickController {
                 squareComponent.repaint();
                 chessboard.clickController.swapPlayer();
             }
-            else if(squareComponent.isReversal() && squareComponent.getChessColor() == Chessboard.getCurrentColor())
+            else if(squareComponent.isReversal() && squareComponent.getChessColor() .equals(Chessboard.getCurrentColor()))
             {//选定同颜色的已翻开的
                 squareComponent.setSelected(true);
                 first = squareComponent;

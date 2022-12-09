@@ -31,9 +31,12 @@ public class ChessComponent extends SquareComponent{
         g.setColor(Color.DARK_GRAY);
         g.drawOval(spacingLength, spacingLength, getWidth() - 2 * spacingLength, getHeight() - 2 * spacingLength);
 
-        if (isReversal) {
+        if (isReversal || isReversalInCheatingMode) {
             //绘制棋子文字
-            g.setColor(this.getChessColor().getColor());
+            if(isReversalInCheatingMode && (!isReversal))//todo 这里改写了源码
+                g.setColor(this.getChessColor().getColor()==Color.BLACK?Color.gray:Color.MAGENTA);
+            else
+                g.setColor(this.getChessColor().getColor());
             g.setFont(CHESS_FONT);
             g.drawString(this.name, this.getWidth() / 4, this.getHeight() * 2 / 3);
 
