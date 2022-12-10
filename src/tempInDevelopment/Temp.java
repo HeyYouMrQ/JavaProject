@@ -1,8 +1,9 @@
 package tempInDevelopment;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
 
 public class Temp {
     public static void toUse()
@@ -46,5 +47,60 @@ public class Temp {
         public void mouseDragged(MouseEvent event) {}
         // handle event when user moves mouse
         public void mouseMoved(MouseEvent event) {}
+    }
+    private class MyWindowListener implements WindowListener, WindowStateListener, WindowFocusListener {
+        //addWindowListener(new MyWindowListener()); 在需要使用的控件中加这个
+        // Called back upon clicking close-window button
+        @Override
+        public void windowClosing(WindowEvent evt) {System.exit(0);}
+        // Not Used, BUT need to provide an empty body to compile.
+        @Override public void windowOpened(WindowEvent evt) { }
+        @Override public void windowClosed(WindowEvent evt) { }
+        // For Debugging
+        @Override public void windowIconified(WindowEvent evt) {/*setExtendedState(JFrame.ICONIFIED);*/ }
+        @Override public void windowDeiconified(WindowEvent evt) {/*setExtendedState(JFrame.MAXIMIZED_BOTH);*/}
+        @Override public void windowActivated(WindowEvent evt) {}
+        @Override public void windowDeactivated(WindowEvent evt) {}
+        @Override
+        public void windowGainedFocus(WindowEvent e) {}
+        @Override
+        public void windowLostFocus(WindowEvent e) {}
+        @Override
+        public void windowStateChanged(WindowEvent e) {}
+    }
+    public class CirclePanel extends JPanel {
+        private int radius = 50; // Default circle radius
+        private Color color = Color.BLACK;
+        private final Random random = new Random();
+        public CirclePanel(int width, int height) {
+            enableEvents(AWTEvent.MOUSE_EVENT_MASK);//代表当前组件可以接受鼠标监听事件  非常好用！！！
+            //重大发现：其实JFrame,JPanel,JComponent,JLabel等都有paintComponent()和processMouseEvent()重写方法的！不过需要继承再重写。
+            setLayout(null);
+            this.setBackground(Color.WHITE);
+            this.setSize(width, (int) (height * 0.66));
+            this.setLocation(0, 0);
+        }
+        public void enlarge() {radius = (int) (radius * 1.1);this.repaint();}
+        public void shrink() {radius = (int) (radius * 0.9);this.repaint();}
+        /**Repaint the circle
+         * 如果父组件调用了repaint(),那么它的子组件也都会调用自己的repaint()
+         */
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(this.color);
+            g.drawString(String.format("Radius: %d",this.radius),10,15);
+            g.fillOval(this.getWidth() / 2 - radius, this.getHeight() / 2 - radius, 2 * radius, 2 * radius);
+        }
+        //当鼠标与当前Component触发事件时，会自动调用这个方法
+        @Override
+        protected void processMouseEvent(MouseEvent e) {
+            super.processMouseEvent(e);
+            if (e.getID() == MouseEvent.MOUSE_PRESSED) {
+                color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
+                System.out.println(color);
+                repaint();//调用当前类的paintComponent
+            }
+        }
     }
 }

@@ -7,6 +7,8 @@ import model.ChessboardPoint;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+
 import static view.Chessboard.*;
 
 /**
@@ -18,7 +20,10 @@ import static view.Chessboard.*;
 public class ChessGameFrame extends JFrame {
     @Override
     public void setExtendedState(int state) {
-        super.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        if(state==JFrame.ICONIFIED)
+            super.setExtendedState(JFrame.ICONIFIED);
+        else if(state==JFrame.MAXIMIZED_BOTH)
+            super.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     private final int WIDTH;
@@ -37,57 +42,130 @@ public class ChessGameFrame extends JFrame {
     public Container getContentPane() {
         return super.getContentPane();
     }
-
     public static JLabel getScoreOfBlack() {
         return scoreOfBlack;
     }
-
     public static JLabel getScoreOfRed() {
         return scoreOfRed;
     }
     public ChessGameFrame(int width,int height) {
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.setUndecorated(true);
+        this.setUndecorated(true);//不要工具栏
+        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
         setTitle("暗棋"); //设置标题
-        this.WIDTH=width;
-        this.HEIGHT=height;
+        //this.WIDTH=width; todo 修改了源码
+        //this.HEIGHT=height;
+        this.WIDTH=Toolkit.getDefaultToolkit().getScreenSize().width;//直接设为最大尺寸
+        this.HEIGHT=Toolkit.getDefaultToolkit().getScreenSize().height;
         this.CHESSBOARD_SIZE=HEIGHT*4/5;
-
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null); // Center the window.
-        gamePanel.setBackground(Color.WHITE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
 
-        gamePanel.setLayout(null);
+        loadMenuPanel();
+        loadGamePanel();
+        setContentPane(menuPanel);
+    }
+    private void loadMenuPanel()
+    {
+        menuPanel.setBackground(Color.RED);
+        menuPanel.setLayout(null);
 
-        addLabel();
-    //    addHelloButton();
-        addLoadButton();
+        addMenuLabel();
+        addPVCButton();
+        addPVPButton();
+        addMenuExitButton();
+        addMenuMinimize();
+    }
+    private void addMenuLabel() {//todo
+    /*    statusLabel = new JLabel("RED's TURN");
+        statusLabel.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 20);
+        statusLabel.setSize(200, 60);
+        statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
+        gamePanel.add(statusLabel);
+     */
+    }
+
+    private void addPVCButton() {
+        JButton button = new JButton("Player vs Computer");
+        button.setLocation(WIDTH * 2 / 5 , HEIGHT *4/ 20);
+        button.setSize(220, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        button.setBackground(Color.LIGHT_GRAY);//todo
+        menuPanel.add(button);
+
+        button.addActionListener(e -> {
+            menuPanel.setEnabled(false);
+            menuPanel.setVisible(false);
+            setContentPane(gamePanel);
+            gamePanel.setEnabled(true);
+            gamePanel.setVisible(true);
+        });
+    }
+    private void addPVPButton() {//todo
+        JButton button = new JButton("Player vs Player");
+        button.setLocation(WIDTH * 2 / 5 , HEIGHT *8/ 20);
+        button.setSize(220, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        button.setBackground(Color.LIGHT_GRAY);//todo
+        menuPanel.add(button);
+
+        button.addActionListener(e -> {
+        //    setContentPane(gamePanel);
+        });
+    }
+    private void addMenuExitButton() {
+        JButton button = new JButton("EXIT");
+        button.addActionListener((e) -> {
+            String[] options={"Yes","Cancel"};
+            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to exit?","From Judge"
+                    ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+            if(choice==0){//菜单 todo
+                System.exit(0);
+            }
+        });
+        button.setLocation(WIDTH * 2 / 5, HEIGHT *12 / 20);
+        button.setSize(220, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        menuPanel.add(button);
+    }
+    private void addMenuMinimize() {
+        JButton button = new JButton("MINIMIZE");
+        button.addActionListener((e) -> {
+            setExtendedState(JFrame.ICONIFIED);
+        });
+        button.setLocation(WIDTH * 2 / 5, HEIGHT *16 / 20);
+        button.setSize(220, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        menuPanel.add(button);
+    }
+    private void loadGamePanel()
+    {
+        gamePanel.setBackground(Color.WHITE);
+        gamePanel.setLayout(null);
+        addGameLabel();
+        addGameLoadButton();
         addCheatingModeButton();
         addRestartButton();
         addWithdrawButton();
-        addExitButton();
-
+        addGameEscapeButton();
+        addGameMinimize();
         addChessboard();
-
-        setContentPane(gamePanel);
     }
-
     /**
      * 在游戏窗体中添加棋盘
      */
     private void addChessboard() {
         chessboard = new Chessboard(CHESSBOARD_SIZE/2,CHESSBOARD_SIZE);
         gameController = new GameController(chessboard);
-        chessboard.setLocation(HEIGHT / 10, HEIGHT / 10);
+        chessboard.setLocation(WIDTH / 5, HEIGHT / 10);
         gamePanel.add(chessboard);
     }
 
     /**
      * 在游戏窗体中添加标签
      */
-    private void addLabel() {
+    private void addGameLabel() {
         statusLabel = new JLabel("RED's TURN");
         statusLabel.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 20);
         statusLabel.setSize(200, 60);
@@ -111,18 +189,7 @@ public class ChessGameFrame extends JFrame {
         return statusLabel;
     }
 
-    /**
-     * 在游戏窗体中增加一个按钮，如果按下的话就会显示Hello, world!
-     */
-/*    private void addHelloButton() {//todo
-        JButton button = new JButton("Show Hello Here");
-        button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "Hello, world!"));
-        button.setLocation(WIDTH * 3 / 5, HEIGHT / 10 + 120);
-        button.setSize(180, 60);
-        button.setFont(new Font("宋体", Font.BOLD, 20));
-        add(button);
-    }*/
-    private void addLoadButton() {
+    private void addGameLoadButton() {
         JButton button = new JButton("Load");
         button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *5/ 20);
         button.setSize(180, 60);
@@ -151,7 +218,7 @@ public class ChessGameFrame extends JFrame {
                 isCheatingMode=false;
             }
         });
-        cheatingButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *8 / 20);
+        cheatingButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *7 / 20);
         cheatingButton.setSize(230, 60);
         cheatingButton.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(cheatingButton);
@@ -163,7 +230,7 @@ public class ChessGameFrame extends JFrame {
             chessboard.initAllChessOnBoard();//restart!
             ChessGameFrame.repaintAll();
         });
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *11 /20 );
+        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *9 /20 );
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);
@@ -257,28 +324,41 @@ public class ChessGameFrame extends JFrame {
         withdrawButton.addActionListener((e) -> {
             withdraw();
         });
-        withdrawButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *14 / 20);
+        withdrawButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *11 / 20);
         withdrawButton.setSize(180, 60);
         withdrawButton.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(withdrawButton);
     }
 
-    private void addExitButton() {
-        JButton button = new JButton("EXIT");
+    private void addGameEscapeButton() {
+        JButton button = new JButton("ESCAPE");
         button.addActionListener((e) -> {
             String[] options={"Yes","Cancel"};
-            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to exit?","From Judge"
+            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to escape from this game?","From Judge"
                     ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
             if(choice==0){//菜单 todo
-                System.exit(0);
+                gamePanel.setEnabled(false);
+                gamePanel.setVisible(false);
+                setContentPane(menuPanel);
+                menuPanel.setEnabled(true);
+                menuPanel.setVisible(true);
             }
         });
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *17 / 20);
+        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *13 / 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);
     }
-
+    private void addGameMinimize() {
+        JButton button = new JButton("MINIMIZE");
+        button.addActionListener((e) -> {
+            setExtendedState(JFrame.ICONIFIED);
+        });
+        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *15 / 20);
+        button.setSize(180, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        gamePanel.add(button);
+    }
     public static void repaintAll()
     {
         withdrawButton.repaint();
@@ -287,5 +367,13 @@ public class ChessGameFrame extends JFrame {
         scoreOfBlack.repaint();
         scoreOfRed.repaint();
         cheatingButton.repaint();
+    }
+    @Override
+    protected void processWindowEvent(WindowEvent e)
+    {
+        super.processWindowEvent(e);
+        if (e.getID() == WindowEvent.WINDOW_ICONIFIED) {setExtendedState(JFrame.ICONIFIED);}
+        if (e.getID() == WindowEvent.WINDOW_DEICONIFIED) {setExtendedState(JFrame.MAXIMIZED_BOTH);}
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {System.exit(0);}
     }
 }
