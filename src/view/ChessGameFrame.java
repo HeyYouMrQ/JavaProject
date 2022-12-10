@@ -16,6 +16,11 @@ import static view.Chessboard.*;
  * 3 JButton： 按钮
  */
 public class ChessGameFrame extends JFrame {
+    @Override
+    public void setExtendedState(int state) {
+        super.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
     private final int WIDTH;
     private final int HEIGHT;
     public final int CHESSBOARD_SIZE;
@@ -27,6 +32,7 @@ public class ChessGameFrame extends JFrame {
     public static Chessboard chessboard;
 
     public static final int shiftConst1=20;
+    public static JPanel gamePanel=new JPanel(),menuPanel=new JPanel();//todo
     @Override
     public Container getContentPane() {
         return super.getContentPane();
@@ -40,6 +46,9 @@ public class ChessGameFrame extends JFrame {
         return scoreOfRed;
     }
     public ChessGameFrame(int width,int height) {
+
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setUndecorated(true);
         setTitle("暗棋"); //设置标题
         this.WIDTH=width;
         this.HEIGHT=height;
@@ -47,16 +56,22 @@ public class ChessGameFrame extends JFrame {
 
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null); // Center the window.
-        getContentPane().setBackground(Color.WHITE);
+        gamePanel.setBackground(Color.WHITE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
-        setLayout(null);
+
+        gamePanel.setLayout(null);
+
         addLabel();
     //    addHelloButton();
-        addRestartButton();
-        addCheatingModeButton();
         addLoadButton();
+        addCheatingModeButton();
+        addRestartButton();
         addWithdrawButton();
+        addExitButton();
+
         addChessboard();
+
+        setContentPane(gamePanel);
     }
 
     /**
@@ -66,31 +81,30 @@ public class ChessGameFrame extends JFrame {
         chessboard = new Chessboard(CHESSBOARD_SIZE/2,CHESSBOARD_SIZE);
         gameController = new GameController(chessboard);
         chessboard.setLocation(HEIGHT / 10, HEIGHT / 10);
-        add(chessboard);
+        gamePanel.add(chessboard);
     }
 
     /**
      * 在游戏窗体中添加标签
      */
     private void addLabel() {
-        statusLabel = new JLabel("BLACK's TURN");
-        statusLabel.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 10);
+        statusLabel = new JLabel("RED's TURN");
+        statusLabel.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 20);
         statusLabel.setSize(200, 60);
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
-        add(statusLabel);
+        gamePanel.add(statusLabel);
 
         scoreOfBlack = new JLabel(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
-        scoreOfBlack.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *2/ 10);
+        scoreOfBlack.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *2/ 20);
         scoreOfBlack.setSize(200, 60);
         scoreOfBlack.setFont(new Font("宋体", Font.BOLD, 20));
-        add(scoreOfBlack);
+        gamePanel.add(scoreOfBlack);
 
         scoreOfRed = new JLabel(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
-        scoreOfRed.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *3/ 10);
+        scoreOfRed.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *3/ 20);
         scoreOfRed.setSize(200, 60);
         scoreOfRed.setFont(new Font("宋体", Font.BOLD, 20));
-        add(scoreOfRed);
-
+        gamePanel.add(scoreOfRed);
     }
 
     public static JLabel getStatusLabel() {
@@ -108,16 +122,19 @@ public class ChessGameFrame extends JFrame {
         button.setFont(new Font("宋体", Font.BOLD, 20));
         add(button);
     }*/
-    private void addRestartButton() {
-        JButton button = new JButton("RESTART");
-        button.addActionListener((e) -> {
-            chessboard.initAllChessOnBoard();//restart!
-            ChessGameFrame.repaintAll();
-        });
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 10 + 420);
+    private void addLoadButton() {
+        JButton button = new JButton("Load");
+        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *5/ 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
-        add(button);
+        button.setBackground(Color.LIGHT_GRAY);
+        gamePanel.add(button);
+
+        button.addActionListener(e -> {
+            System.out.println("Click load");
+            String path = JOptionPane.showInputDialog(this, "Input Path here");
+            gameController.loadGameFromFile(path);
+        });
     }
 
     public static JButton cheatingButton = new JButton("Cheating Mode: OFF");
@@ -134,11 +151,24 @@ public class ChessGameFrame extends JFrame {
                 isCheatingMode=false;
             }
         });
-        cheatingButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 10 + 320);
+        cheatingButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *8 / 20);
         cheatingButton.setSize(230, 60);
         cheatingButton.setFont(new Font("宋体", Font.BOLD, 20));
-        add(cheatingButton);
+        gamePanel.add(cheatingButton);
     }
+
+    private void addRestartButton() {
+        JButton button = new JButton("RESTART");
+        button.addActionListener((e) -> {
+            chessboard.initAllChessOnBoard();//restart!
+            ChessGameFrame.repaintAll();
+        });
+        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *11 /20 );
+        button.setSize(180, 60);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        gamePanel.add(button);
+    }
+
     public static JButton withdrawButton = new JButton("Cheating Mode: OFF");
     private void withdraw()
     {//todo
@@ -227,25 +257,28 @@ public class ChessGameFrame extends JFrame {
         withdrawButton.addActionListener((e) -> {
             withdraw();
         });
-        withdrawButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 10 + 500);
+        withdrawButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *14 / 20);
         withdrawButton.setSize(180, 60);
         withdrawButton.setFont(new Font("宋体", Font.BOLD, 20));
-        add(withdrawButton);
+        gamePanel.add(withdrawButton);
     }
-    private void addLoadButton() {
-        JButton button = new JButton("Load");
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 10 + 240);
+
+    private void addExitButton() {
+        JButton button = new JButton("EXIT");
+        button.addActionListener((e) -> {
+            String[] options={"Yes","Cancel"};
+            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to exit?","From Judge"
+                    ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+            if(choice==0){//菜单 todo
+                System.exit(0);
+            }
+        });
+        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *17 / 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
-        button.setBackground(Color.LIGHT_GRAY);
-        add(button);
-
-        button.addActionListener(e -> {
-            System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this, "Input Path here");
-            gameController.loadGameFromFile(path);
-        });
+        gamePanel.add(button);
     }
+
     public static void repaintAll()
     {
         withdrawButton.repaint();

@@ -115,7 +115,7 @@ public class ClickController {
     }
     private void hasWinner(Players pl)
     {
-        Object[] options={"Menu","Restart!"};
+        String[] options={"Menu","Restart!"};
         int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame()
                 ,pl.getColor()==Color.BLACK? "BLACK":"RED" +" has won!"
                 ,"Game over!",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);

@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
+import static view.ChessGameFrame.withdrawButton;
+
 /**
  * 这个类表示棋盘组建，其包含：
  * SquareComponent[][]: 4*8个方块格子组件
@@ -126,7 +128,8 @@ public class Chessboard extends JComponent {
         firCom.clear();   firCol.clear();   firX.clear(); firY.clear();
         secCom.clear();   secCol.clear();   secX.clear(); secY.clear();
         firCannonSecRev.clear();
-        currentColor = ChessColor.BLACK;
+        withdrawButton.setEnabled(false);
+        currentColor = ChessColor.RED;
         redPlayer.setCurrentScore(0);
         blackPlayer.setCurrentScore(0);
         ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
