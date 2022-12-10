@@ -197,19 +197,19 @@ public class ChessGameFrame extends JFrame {
      */
     private void addGameLabel() {
         statusLabel = new JLabel("RED's TURN");
-        statusLabel.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 20);
+        statusLabel.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT / 20);
         statusLabel.setSize(200, 60);
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(statusLabel);
 
         scoreOfBlack = new JLabel(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
-        scoreOfBlack.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *2/ 20);
+        scoreOfBlack.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *2/ 20);
         scoreOfBlack.setSize(200, 60);
         scoreOfBlack.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(scoreOfBlack);
 
         scoreOfRed = new JLabel(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
-        scoreOfRed.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *3/ 20);
+        scoreOfRed.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *3/ 20);
         scoreOfRed.setSize(200, 60);
         scoreOfRed.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(scoreOfRed);
@@ -221,7 +221,7 @@ public class ChessGameFrame extends JFrame {
 
     private void addGameLoadButton() {
         JButton button = new JButton("Load");
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *5/ 20);
+        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *5/ 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         button.setBackground(Color.LIGHT_GRAY);
@@ -248,7 +248,7 @@ public class ChessGameFrame extends JFrame {
                 isCheatingMode=false;
             }
         });
-        cheatingButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *7 / 20);
+        cheatingButton.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *7 / 20);
         cheatingButton.setSize(230, 60);
         cheatingButton.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(cheatingButton);
@@ -272,7 +272,7 @@ public class ChessGameFrame extends JFrame {
                 ChessGameFrame.repaintAll();
             }
         });
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *9 /20 );
+        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *9 /20 );
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);
@@ -371,7 +371,7 @@ public class ChessGameFrame extends JFrame {
         withdrawButton.addActionListener((e) -> {
             withdraw();
         });
-        withdrawButton.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *11 / 20);
+        withdrawButton.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *11 / 20);
         withdrawButton.setSize(180, 60);
         withdrawButton.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(withdrawButton);
@@ -391,7 +391,7 @@ public class ChessGameFrame extends JFrame {
                 menuPanel.setVisible(true);
             }
         });
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *13 / 20);
+        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *13 / 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);
@@ -401,7 +401,7 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener((e) -> {
             setExtendedState(JFrame.ICONIFIED);
         });
-        button.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT *15 / 20);
+        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *15 / 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);
