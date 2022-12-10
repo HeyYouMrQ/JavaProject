@@ -1,18 +1,15 @@
-import view.ChessGameFrame;
-
+import view.Handler;
 import javax.swing.*;
-
 public class Main {
-    public static void main(String[] args) {
 
-        ChessGameFrame mainFrame = new ChessGameFrame(720,720);
-        SwingUtilities.invokeLater(() -> {mainFrame.setVisible(true);});
-        //test20221210
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {Handler.mainFrame.setVisible(true);});
     }
 }
 //
 /**
  * 待实现：
+ * 把作弊模式的颜色换换(1.RGB 2.brighter())
  * 展示捕获的棋子
  * 棋子的移动做成多帧动画
  * 存档&读档(如何检测错误？？？)

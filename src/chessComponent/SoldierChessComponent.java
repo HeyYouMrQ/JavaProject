@@ -10,7 +10,7 @@ public class SoldierChessComponent extends ChessComponent {
 
     public SoldierChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         super(chessboardPoint, location, chessColor, clickController, size);
-        if (this.getChessColor() == ChessColor.RED) {
+        if (this.getChessColor().equals(ChessColor.RED)) {
             name = "兵";
         } else {
             name = "卒";

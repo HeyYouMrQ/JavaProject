@@ -10,7 +10,7 @@ public class AdvisorChessComponent extends ChessComponent {
 
     public AdvisorChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         super(chessboardPoint, location, chessColor, clickController, size);
-        if (this.getChessColor() == ChessColor.RED) {
+        if (this.getChessColor().equals(ChessColor.RED)) {
             name = "仕";
         } else {
             name = "士";

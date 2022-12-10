@@ -4,13 +4,15 @@ import chessComponent.EmptySlotComponent;
 import chessComponent.SquareComponent;
 import model.ChessColor;
 import player.Players;
+import view.CapturingBoard;
 import view.ChessGameFrame;
 import view.Chessboard;
+import view.Handler;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static view.ChessGameFrame.withdrawButton;
+import static view.ChessGameFrame.*;
 import static view.Chessboard.*;
 
 public class ClickController {
@@ -22,25 +24,24 @@ public class ClickController {
     public void recordWithdraw(SquareComponent fir)
     {
         ope.push(1);
-        firCom.push(null);/*0-6:将士相车马兵炮 7:空 */  firCol.push(null);//0黑1红
+        firCom.push(null);/*0-6:将士相车马兵炮 7:空 */  firCol.push(null);
         firX.push(fir.getChessboardPoint().getX()); firY.push(fir.getChessboardPoint().getY());
         secCom.push(null);   secCol.push(null);   secX.push(null); secY.push(null); firCannonSecRev.push(null);
+        capturingIsMe.push(null);capturingLabel.push(null);
         withdrawButton.setEnabled(true);
     }
-    public void recordWithdraw(SquareComponent fir,SquareComponent sec,int rev)
+    public void recordWithdraw(SquareComponent fir,SquareComponent sec,int rev,int meIsEaten,int label)
     {
         ope.push(2);
-        firCom.push(fir.label);/*0-6:将士相车马兵炮 7:空 */  firCol.push(fir.getChessColor().equals(ChessColor.BLACK)?0:1);//0黑1红
+        firCom.push(fir.label);/*0-6:将士相车马兵炮 7:空 */  firCol.push(fir.getChessColor().equals(ChessColor.RED)?0:1);//0红1黑
         firX.push(fir.getChessboardPoint().getX()); firY.push(fir.getChessboardPoint().getY());
-        secCom.push(sec.label);   secCol.push(sec.getChessColor().equals(ChessColor.BLACK)?0:1);
+        secCom.push(sec.label);   secCol.push(sec.getChessColor().equals(ChessColor.RED)?0:1);
         secX.push(sec.getChessboardPoint().getX()); secY.push(sec.getChessboardPoint().getY());
-        if(rev==1)
-            firCannonSecRev.push(1);
-        else
-            firCannonSecRev.push(0);
+        firCannonSecRev.push(rev);
+        capturingIsMe.push(meIsEaten);capturingLabel.push(label);
         withdrawButton.setEnabled(true);
     }
-    public boolean canChangeCursor(SquareComponent squareComponent)//todo 加的
+    public boolean canChangeCursor(SquareComponent squareComponent)
     {
         if(first!=null && handleSecond(squareComponent))
             return true;
@@ -74,10 +75,15 @@ public class ClickController {
             }
             else if (handleSecond(squareComponent))
             {//能吃的、能移动到空格子的就做
-                if(!squareComponent.isReversal())
-                    recordWithdraw(first,squareComponent,1);
-                else
-                    recordWithdraw(first,squareComponent,0);
+                ChessColor eatenColor=squareComponent.getChessColor();
+                boolean meIsEaten=mePlayer.getColor().equals(eatenColor.equals(ChessColor.RED)?Color.RED:Color.BLACK)?true:false;
+                CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
+                change.capturingChesses[squareComponent.label].num++;
+                change.capturingChesses[squareComponent.label].repaint();
+                recordWithdraw(first,squareComponent,squareComponent.isReversal()?0:1,meIsEaten?1:0,squareComponent.label);
+
+                //todo stack 做一下
+
                 first.addScoreToPlayer(squareComponent);
                 //repaint in swap chess method.
                 chessboard.swapChessComponents(first, squareComponent);
@@ -117,10 +123,14 @@ public class ClickController {
     {
         String[] options={"Menu","Restart!"};
         int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame()
-                ,pl.getColor()==Color.BLACK? "BLACK":"RED" +" has won!"
+                ,pl.getColor().equals(Color.BLACK)? "BLACK":"RED" +" has won!"
                 ,"Game over!",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
-        if(choice==0){//菜单 todo
-
+        if(choice==0){//菜单
+            ChessGameFrame.gamePanel.setEnabled(false);
+            ChessGameFrame.gamePanel.setVisible(false);
+            Handler.mainFrame.setContentPane(ChessGameFrame.menuPanel);
+            ChessGameFrame.menuPanel.setEnabled(true);
+            ChessGameFrame.menuPanel.setVisible(true);
         }
         else {
             chessboard.initAllChessOnBoard();//restart!
