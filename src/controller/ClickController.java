@@ -75,15 +75,17 @@ public class ClickController {
             }
             else if (handleSecond(squareComponent))
             {//能吃的、能移动到空格子的就做
-                ChessColor eatenColor=squareComponent.getChessColor();
-                boolean meIsEaten=mePlayer.getColor().equals(eatenColor.equals(ChessColor.RED)?Color.RED:Color.BLACK)?true:false;
-                CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
-                change.capturingChesses[squareComponent.label].num++;
-                change.capturingChesses[squareComponent.label].repaint();
-                recordWithdraw(first,squareComponent,squareComponent.isReversal()?0:1,meIsEaten?1:0,squareComponent.label);
-
-                //todo stack 做一下
-
+                if(squareComponent.label!=7)
+                {
+                    ChessColor eatenColor=squareComponent.getChessColor();
+                    boolean meIsEaten=mePlayer.getColor().equals(eatenColor.equals(ChessColor.RED)?Color.RED:Color.BLACK);
+                    CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
+                    change.capturingChesses[squareComponent.label].num++;
+                    change.capturingChesses[squareComponent.label].repaint();
+                    recordWithdraw(first,squareComponent,squareComponent.isReversal()?0:1,meIsEaten?1:0,squareComponent.label);
+                }
+                else
+                    recordWithdraw(first,squareComponent,squareComponent.isReversal()?0:1,0,squareComponent.label);
                 first.addScoreToPlayer(squareComponent);
                 //repaint in swap chess method.
                 chessboard.swapChessComponents(first, squareComponent);

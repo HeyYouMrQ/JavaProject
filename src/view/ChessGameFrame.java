@@ -351,9 +351,12 @@ public class ChessGameFrame extends JFrame {
             ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
             ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
 
-            boolean meIsEaten=(capturingIsMe.peek()==1);
-            CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
-            change.capturingChesses[capturingLabel.peek()].num--;
+            if(capturingLabel.peek()!=7)
+            {
+                boolean meIsEaten=(capturingIsMe.peek()==1);
+                CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
+                change.capturingChesses[capturingLabel.peek()].num--;
+            }
         }
         Chessboard.setCurrentColor(Chessboard.getCurrentColor().equals(ChessColor.RED)?ChessColor.BLACK:ChessColor.RED);
         ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));

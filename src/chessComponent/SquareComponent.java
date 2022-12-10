@@ -134,7 +134,6 @@ public abstract class SquareComponent extends JComponent {
     public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
         SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
         if(destination.getX()!=this.getChessboardPoint().getX() && destination.getY()!=this.getChessboardPoint().getY()) return false;
-
         if(destination.getX()==this.getChessboardPoint().getX()
                 && Math.min(destination.getY(),this.getChessboardPoint().getY())!=Math.max(destination.getY(),this.getChessboardPoint().getY())-1)
             return false;
@@ -144,7 +143,6 @@ public abstract class SquareComponent extends JComponent {
         return (destinationChess.isReversal && destinationChess.getChessColor() != Chessboard.getCurrentColor()
                 && ((this.hierarchy>=destinationChess.hierarchy) || (this.hierarchy==0 && destinationChess.hierarchy==5)) )
                 || destinationChess instanceof EmptySlotComponent;
-        //todo: complete this method
     }
 
 
