@@ -18,8 +18,8 @@ import static view.Chessboard.mePlayer;
 import static view.Handler.mainFrame;
 public class ComputerPlayer extends Thread
 {
-    public boolean stop;
-    private int difficultyMode=0;//0随机1贪心
+    public static boolean stop;
+    private static int difficultyMode=0;//0随机1贪心
     private final shift up=new shift(-1,0),down= new shift(1,0),
                 left=new shift(0,-1),right=new shift(0,1);
     private static class shift
@@ -153,8 +153,8 @@ public class ComputerPlayer extends Thread
         canListenToMe=true;
         mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
-    public void setDifficultyMode(int diffMode) {
-        this.difficultyMode=diffMode;
+    public static void setDifficultyMode(int diffMode) {
+        difficultyMode=diffMode;
     }
     @Override
     public void run() {
@@ -166,5 +166,7 @@ public class ComputerPlayer extends Thread
                 handlePlay();
             try {sleep(50);} catch (InterruptedException ex) {}
         }
+        System.out.println("HEY CLOSED");
+        return;
     }
 }

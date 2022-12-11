@@ -2,6 +2,7 @@ package controller;
 
 import chessComponent.EmptySlotComponent;
 import chessComponent.SquareComponent;
+import computerPlayer.ComputerPlayer;
 import model.ChessColor;
 import player.Players;
 import view.CapturingBoard;
@@ -137,7 +138,7 @@ public class ClickController {
     }
     private void hasWinner(Players pl)
     {
-        computerPlayer.stop=true;
+        ComputerPlayer.stop=true;
         String[] options={"Menu","Restart!"};
         int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame()
                 ,pl.getColor().equals(Color.BLACK)? "BLACK":"RED" +" has won!"
@@ -155,6 +156,7 @@ public class ClickController {
         else {
             chessboard.initAllChessOnBoard();//restart!
             ChessGameFrame.repaintAll();
+            new ComputerPlayer().start();
         }
     }
     private void ckeckWinner() {
