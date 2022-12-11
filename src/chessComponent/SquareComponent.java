@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 import static view.Chessboard.isCheatingMode;
+import static view.Handler.mainFrame;
+
 /**
  * 这个类是一个抽象类，主要表示8*4棋盘上每个格子的棋子情况。
  * 有两个子类：
@@ -104,6 +106,8 @@ public abstract class SquareComponent extends JComponent {
      */
     @Override
     protected void processMouseEvent(MouseEvent e) {//哇，这个好好用
+        if(!Chessboard.canListenToMe)
+            return;
         super.processMouseEvent(e);
         if (e.getID() == MouseEvent.MOUSE_PRESSED) {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
@@ -114,12 +118,12 @@ public abstract class SquareComponent extends JComponent {
                 isReversalInCheatingMode=true;
             this.repaint();
             if(clickController.canChangeCursor(this))
-                this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                mainFrame.setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
         if (!(this instanceof EmptySlotComponent) && e.getID() == MouseEvent.MOUSE_EXITED) {//todo 加的，源码没有
             isReversalInCheatingMode=false;
             this.repaint();
-            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 

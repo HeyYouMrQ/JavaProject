@@ -36,7 +36,8 @@ public class ChessGameFrame extends JFrame {
     private static JLabel scoreOfRed;
     public static Chessboard chessboard;
     public static CapturingBoard capturingBoardMe, capturingBoardHe;//capturingBoardMe:我捕获的棋子(所以与我的颜色相反！)
-    public static ComputerPlayer computerPlayer;
+    public static ComputerPlayer computerPlayer=new ComputerPlayer();
+    public static int menuMode;//0人机1玩家对战
     
     public static JPanel gamePanel=new JPanel(),menuPanel=new JPanel();//todo
     public static PanelComponent PVCButtonsPanel=new PanelComponent();
@@ -102,11 +103,11 @@ public class ChessGameFrame extends JFrame {
         button.setLocation(WIDTH * 2 / 5 , HEIGHT *4/ 20);
         button.setSize(220, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
-        button.setBackground(Color.LIGHT_GRAY);//todo
+        button.setBackground(Color.LIGHT_GRAY);
         menuPanel.add(button);
 
         button.addActionListener(e -> {
-            Chessboard.menuMode =0;
+            menuMode =0;
             chessboard.initAllChessOnBoard();
             addCapturingBoard();
             ChessGameFrame.repaintAll();
@@ -119,6 +120,7 @@ public class ChessGameFrame extends JFrame {
             gamePanel.setVisible(true);
             gamePanel.add(PVCButtonsPanel);
             setContentPane(gamePanel);
+            computerPlayer.start();
         });
     }
     public static void contendFirstInPVP()
@@ -227,13 +229,14 @@ public class ChessGameFrame extends JFrame {
     {
         PVCButtonsPanel.setBackground(Color.WHITE);
         PVCButtonsPanel.setLayout(null);
-        PVCButtonsPanel.setSize(230,290);
+        PVCButtonsPanel.setSize(230,380);
         PVCButtonsPanel.setLocation(WIDTH * 4 / 5, HEIGHT *2/ 20);
 
         loadGameLoadButton();
         loadCheatingModeButton();
         loadRestartButton();
         loadWithdrawButton();
+        loadSetDifficultyButton();
     }
     private void loadGameLoadButton() {
         JButton button = new JButton("Load");
@@ -251,7 +254,7 @@ public class ChessGameFrame extends JFrame {
     }
 
     public static JButton cheatingButton = new JButton("Cheating Mode: OFF");
-    private void loadCheatingModeButton() {//todo
+    private void loadCheatingModeButton() {
         cheatingButton.addActionListener((e) -> {
             if(cheatingButton.getText().equals("Cheating Mode: OFF")) {
                 cheatingButton.setText("Cheating Mode: ON");
@@ -276,17 +279,8 @@ public class ChessGameFrame extends JFrame {
             String[] options={"Restart!","Cancel"};
             int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to restart?"
                     ,"From Judge",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
-            if(choice==0){//菜单
-                gamePanel.setEnabled(false);
-                gamePanel.setVisible(false);
-                PVCButtonsPanel.setEnabled(false);
-                PVCButtonsPanel.setVisible(false);
-                menuPanel.setEnabled(true);
-                menuPanel.setVisible(true);
-                gamePanel.remove(PVCButtonsPanel);
-                setContentPane(ChessGameFrame.menuPanel);
-            }
-            else if(choice==1){
+            if(choice==0){
+                computerPlayer.stop=true;
                 chessboard.initAllChessOnBoard();//restart!
                 ChessGameFrame.repaintAll();
             }
@@ -399,6 +393,26 @@ public class ChessGameFrame extends JFrame {
         PVCButtonsPanel.add(withdrawButton);
     }
 
+    private void loadSetDifficultyButton()
+    {
+        JButton setDifficultyButton = new JButton("NORMAL");
+        setDifficultyButton.addActionListener((e) -> {
+            if(setDifficultyButton.getText().equals("NORMAL")) {
+                setDifficultyButton.setText("DIFFICULT");
+                setDifficultyButton.repaint();
+                computerPlayer.setDifficultyMode(1);
+            }
+            else {
+                setDifficultyButton.setText("NORMAL");
+                setDifficultyButton.repaint();
+                computerPlayer.setDifficultyMode(0);
+            }
+        });
+        setDifficultyButton.setLocation(0, HEIGHT *4/10);
+        setDifficultyButton.setSize(180, 60);
+        setDifficultyButton.setFont(new Font("宋体", Font.BOLD, 20));
+        PVCButtonsPanel.add(setDifficultyButton);
+    }
     private void addGameEscapeButton() {
         JButton button = new JButton("ESCAPE");
         button.addActionListener((e) -> {

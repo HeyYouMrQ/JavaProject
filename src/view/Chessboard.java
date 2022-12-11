@@ -39,7 +39,7 @@ public class Chessboard extends JComponent {
     public static Stack<Integer> capturingIsMe=new Stack<>(),capturingLabel=new Stack<>();
     public static boolean isCheatingMode=false;
     public static Players mePlayer;
-    public static int menuMode;//0人机1玩家对战
+    public static boolean canListenToMe=true;
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
         setSize(width + 2, height);

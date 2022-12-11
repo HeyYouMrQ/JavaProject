@@ -21,6 +21,13 @@ public class ClickController {
     public ClickController(Chessboard chessboard) {
         this.chessboard = chessboard;
     }
+    private boolean isComputerOperating()//如果是机器正在操作，则返回真
+    {
+        if(ChessGameFrame.menuMode==0 && Chessboard.getCurrentColor()!=(mePlayer.getColor().equals(Color.RED)?
+                ChessColor.RED:ChessColor.BLACK))
+            return true;
+        else return false;
+    }
     public void recordWithdraw(SquareComponent fir)
     {
         ope.push(1);
@@ -47,7 +54,7 @@ public class ClickController {
             return true;
         return false;
     }
-    public void onClick(SquareComponent squareComponent) {
+    public  int onClick(SquareComponent squareComponent) {//操作不成功返回0，选中返回1，翻开返回2，吃掉返回3，取消返回4
         if(first==null)
         {
             if(!squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
@@ -57,12 +64,14 @@ public class ClickController {
                 System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
                 squareComponent.repaint();
                 chessboard.clickController.swapPlayer();
+                return 2;
             }
             else if(squareComponent.isReversal() && squareComponent.getChessColor() .equals(Chessboard.getCurrentColor()))
             {//选定同颜色的已翻开的
                 squareComponent.setSelected(true);
                 first = squareComponent;
                 first.repaint();
+                return 1;
             }
         }
         else if(first!=null)
@@ -72,6 +81,7 @@ public class ClickController {
                 squareComponent.setSelected(false);
                 first.repaint();
                 first = null;
+                return 4;
             }
             else if (handleSecond(squareComponent))
             {//能吃的、能移动到空格子的就做
@@ -92,9 +102,10 @@ public class ClickController {
                 chessboard.clickController.swapPlayer();
                 first.setSelected(false);
                 first = null;
+                return 3;
             }
-            else if(!squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
-            {//翻过来
+            else if(!isComputerOperating() && !squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
+            {//翻过来(为了观感体验，机器不允许这样)
                 recordWithdraw(squareComponent);
                 first.setSelected(false);
                 first.repaint();
@@ -103,26 +114,30 @@ public class ClickController {
                 System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
                 squareComponent.repaint();
                 chessboard.clickController.swapPlayer();
+                return 2;
             }
-            else if (squareComponent.isReversal() && squareComponent.getChessColor() == Chessboard.getCurrentColor())
-            {//换选
+            else if (!isComputerOperating() && squareComponent.isReversal() && squareComponent.getChessColor() == Chessboard.getCurrentColor())
+            {//换选(为了观感体验，机器不允许这样)
                 squareComponent.setSelected(true);
                 first.setSelected(false);
                 first.repaint();
                 squareComponent.repaint();
                 first = squareComponent;
+                return 1;
             }
         }
+        return 0;
     }
     /**
      * @param squareComponent first棋子目标移动到的棋子second
      * @return first棋子是否能够移动到second棋子位置
      */
-    private boolean handleSecond(SquareComponent squareComponent) {//空棋子的isReversal是false！
+    public boolean handleSecond(SquareComponent squareComponent) {//空棋子的isReversal是false！
         return first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint());
     }
     private void hasWinner(Players pl)
     {
+        computerPlayer.stop=true;
         String[] options={"Menu","Restart!"};
         int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame()
                 ,pl.getColor().equals(Color.BLACK)? "BLACK":"RED" +" has won!"
