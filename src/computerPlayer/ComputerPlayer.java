@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import static view.ChessGameFrame.chessboard;
+import static view.ChessGameFrame.withdrawButton;
 import static view.Chessboard.canListenToMe;
 import static view.Chessboard.mePlayer;
 import static view.Handler.mainFrame;
@@ -41,7 +42,7 @@ public class ComputerPlayer extends Thread
             if(chessboard.clickController.onClick(firChess)!=0)
             {
                 if(Chessboard.getCurrentColor().equals(mePlayer.getColor().equals(Color.RED)? ChessColor.RED: ChessColor.BLACK)) return;//翻开
-                try {sleep(1000);} catch (InterruptedException ex) {}
+                try {sleep(400);} catch (InterruptedException ex) {}
                 ArrayList<shift>ar=new ArrayList<>();
                 if(!(firChess instanceof CannonChessComponent))
                 {
@@ -61,11 +62,11 @@ public class ComputerPlayer extends Thread
                     for (int i=0;i<ar.size();i++)
                     {
                         int nx=rx+ar.get(i).sx,ny=ry+ar.get(i).sy;
-                        for(int j=1;nx>=0 && nx<=7 && ny>=0 && ny<=3;j++)
+                        while (nx>=0 && nx<=7 && ny>=0 && ny<=3)
                         {
                             if(chessboard.clickController.onClick(chessboard.getChessComponents()[nx][ny])==3)
                                 return;
-                            nx=rx+j*ar.get(i).sx;   ny=ry+j*ar.get(i).sy;
+                            nx+= ar.get(i).sx;   ny+= ar.get(i).sy;
                         }
                     }
                 }
@@ -112,7 +113,7 @@ public class ComputerPlayer extends Thread
                         for (int k = 0; k < ar.size(); k++)
                         {
                             int nx = i + ar.get(k).sx, ny = j + ar.get(k).sy;
-                            for (int l = 1; nx >= 0 && nx <= 7 && ny >= 0 && ny <= 3; l++)
+                            while (nx >= 0 && nx <= 7 && ny >= 0 && ny <= 3)
                             {
                                 if (chessboard.getChessComponents()[nx][ny].score>maxScore &&
                                         chessboard.getChessComponents()[nx][ny].getChessColor().equals(mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK)
@@ -122,8 +123,8 @@ public class ComputerPlayer extends Thread
                                     fromChess=firChess;
                                     toChess=chessboard.getChessComponents()[nx][ny];
                                 }
-                                nx = i + l * ar.get(k).sx;
-                                ny = i + l * ar.get(k).sy;
+                                nx += ar.get(k).sx;
+                                ny += ar.get(k).sy;
                             }
                         }
                     }
@@ -132,10 +133,8 @@ public class ComputerPlayer extends Thread
             }
         if(maxScore>0)
         {
-            System.out.printf("fff%d %d %d %d\n",fromChess.getChessboardPoint().getX(), fromChess.getChessboardPoint().getY(),
-                    toChess.getChessboardPoint().getX(), toChess.getChessboardPoint().getY());
             chessboard.clickController.onClick(fromChess);
-            try {sleep(1000);} catch (InterruptedException ex) {}
+            try {sleep(400);} catch (InterruptedException ex) {}
             chessboard.clickController.onClick(toChess);
         }
         else
@@ -143,15 +142,17 @@ public class ComputerPlayer extends Thread
     }
     private void handlePlay()
     {
+        withdrawButton.setEnabled(false);
         canListenToMe=false;
         mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        try {sleep(1000);} catch (InterruptedException ex) {}
+        try {sleep(400);} catch (InterruptedException ex) {}
         if(difficultyMode==0)
             playMode0();
         else if(difficultyMode==1)
             playMode1();
         canListenToMe=true;
         mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        withdrawButton.setEnabled(true);
     }
     public static void setDifficultyMode(int diffMode) {
         difficultyMode=diffMode;
@@ -164,7 +165,7 @@ public class ComputerPlayer extends Thread
             if (stop) break;
             if(Chessboard.getCurrentColor()!=(mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
                 handlePlay();
-            try {sleep(50);} catch (InterruptedException ex) {}
+            try {sleep(1000);} catch (InterruptedException ex) {}
         }
         System.out.println("HEY CLOSED");
         return;

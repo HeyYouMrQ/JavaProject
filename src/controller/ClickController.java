@@ -156,7 +156,8 @@ public class ClickController {
         else {
             chessboard.initAllChessOnBoard();//restart!
             ChessGameFrame.repaintAll();
-            new ComputerPlayer().start();
+            computerPlayer=new ComputerPlayer();
+            computerPlayer.start();
         }
     }
     private void ckeckWinner() {

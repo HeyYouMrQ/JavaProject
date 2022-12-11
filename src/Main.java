@@ -6,7 +6,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {Handler.mainFrame.setVisible(true);});
     }
 }
-//
+//问题:人机棋子初始化问题，如何正确的处理withdraw时机器的行为
 /**
  * 待实现：
  * 强制注册用户

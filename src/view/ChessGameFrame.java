@@ -37,7 +37,7 @@ public class ChessGameFrame extends JFrame {
     public static Chessboard chessboard;
     public static CapturingBoard capturingBoardMe, capturingBoardHe;//capturingBoardMe:我捕获的棋子(所以与我的颜色相反！)
     public static int menuMode;//0人机1玩家对战
-    
+    public static ComputerPlayer computerPlayer;
     public static JPanel gamePanel=new JPanel(),menuPanel=new JPanel();//todo
     public static PanelComponent PVCButtonsPanel=new PanelComponent();
     @Override
@@ -119,7 +119,8 @@ public class ChessGameFrame extends JFrame {
             gamePanel.setVisible(true);
             gamePanel.add(PVCButtonsPanel);
             setContentPane(gamePanel);
-            new ComputerPlayer().start();
+            computerPlayer=new ComputerPlayer();
+            computerPlayer.start();
         });
     }
     public static void contendFirstInPVP()
@@ -282,7 +283,8 @@ public class ChessGameFrame extends JFrame {
                 ComputerPlayer.stop=true;
                 chessboard.initAllChessOnBoard();//restart!
                 ChessGameFrame.repaintAll();
-                new ComputerPlayer().start();
+                computerPlayer=new ComputerPlayer();
+                computerPlayer.start();
             }
         });
         button.setLocation(0, HEIGHT *2/10 );
@@ -293,7 +295,7 @@ public class ChessGameFrame extends JFrame {
 
     public static JButton withdrawButton = new JButton("Cheating Mode: OFF");
     private void withdraw()
-    {//todo
+    {
         SquareComponent firChess = chessboard.getChessComponents()[firX.peek()][firY.peek()];
         if(ope.peek()==1)//翻棋子的
             firChess.setReversal(false);
