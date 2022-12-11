@@ -1,6 +1,7 @@
 package view;
 
 import chessComponent.*;
+import computerPlayer.ComputerPlayer;
 import controller.GameController;
 import model.ChessColor;
 import model.ChessboardPoint;
@@ -25,7 +26,6 @@ public class ChessGameFrame extends JFrame {
         else if(state==JFrame.MAXIMIZED_BOTH)
             super.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-
     private final int WIDTH;
     private final int HEIGHT;
     public final int CHESSBOARD_SIZE;
@@ -36,9 +36,10 @@ public class ChessGameFrame extends JFrame {
     private static JLabel scoreOfRed;
     public static Chessboard chessboard;
     public static CapturingBoard capturingBoardMe, capturingBoardHe;//capturingBoardMe:我捕获的棋子(所以与我的颜色相反！)
-
-    public static final int shiftConst1=20;
+    public static ComputerPlayer computerPlayer;
+    
     public static JPanel gamePanel=new JPanel(),menuPanel=new JPanel();//todo
+    public static PanelComponent PVCButtonsPanel=new PanelComponent();
     @Override
     public Container getContentPane() {
         return super.getContentPane();
@@ -71,7 +72,7 @@ public class ChessGameFrame extends JFrame {
     {
         menuPanel.setBackground(Color.RED);
         menuPanel.setLayout(null);
-
+        menuPanel.setVisible(true);
         addMenuLabel();
         addPVCButton();
         addPVPButton();
@@ -80,7 +81,7 @@ public class ChessGameFrame extends JFrame {
     }
     private void addMenuLabel() {//todo
     /*    statusLabel = new JLabel("RED's TURN");
-        statusLabel.setLocation(WIDTH * 3 / 5 + shiftConst1, HEIGHT / 20);
+        statusLabel.setLocation(WIDTH * 3 / 5, HEIGHT / 20);
         statusLabel.setSize(200, 60);
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(statusLabel);
@@ -105,15 +106,19 @@ public class ChessGameFrame extends JFrame {
         menuPanel.add(button);
 
         button.addActionListener(e -> {
-            Chessboard.mode=0;
+            Chessboard.menuMode =0;
             chessboard.initAllChessOnBoard();
             addCapturingBoard();
             ChessGameFrame.repaintAll();
+
             menuPanel.setEnabled(false);
             menuPanel.setVisible(false);
-            setContentPane(gamePanel);
+            PVCButtonsPanel.setEnabled(true);
+            PVCButtonsPanel.setVisible(true);
             gamePanel.setEnabled(true);
             gamePanel.setVisible(true);
+            gamePanel.add(PVCButtonsPanel);
+            setContentPane(gamePanel);
         });
     }
     public static void contendFirstInPVP()
@@ -161,14 +166,13 @@ public class ChessGameFrame extends JFrame {
     {
         gamePanel.setBackground(Color.WHITE);
         gamePanel.setLayout(null);
+        gamePanel.setVisible(true);
         addGameLabel();
-        addGameLoadButton();
-        addCheatingModeButton();
-        addRestartButton();
-        addWithdrawButton();
+
         addGameEscapeButton();
         addGameMinimize();
         addChessboard();
+        loadPVCButtons();
     }
     /**
      * 在游戏窗体中添加棋盘
@@ -176,7 +180,7 @@ public class ChessGameFrame extends JFrame {
     private void addChessboard() {
         chessboard = new Chessboard(CHESSBOARD_SIZE/2,CHESSBOARD_SIZE);
         gameController = new GameController(chessboard);
-        chessboard.setLocation(WIDTH / 5, HEIGHT / 10);
+        chessboard.setLocation(WIDTH / 5, HEIGHT / 5);
         gamePanel.add(chessboard);
     }
     private void addCapturingBoard()
@@ -186,8 +190,8 @@ public class ChessGameFrame extends JFrame {
         capturingBoardMe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
                 mePlayer.getColor().equals(Color.RED)?1:0);
 
-        capturingBoardHe.setLocation(WIDTH/5 - CHESSBOARD_SIZE/8, HEIGHT / 10);
-        capturingBoardMe.setLocation(WIDTH/5 + CHESSBOARD_SIZE/2, HEIGHT / 10);//自己放在右边
+        capturingBoardHe.setLocation(WIDTH/5 - CHESSBOARD_SIZE/8, HEIGHT / 4);
+        capturingBoardMe.setLocation(WIDTH/5 + CHESSBOARD_SIZE/2, HEIGHT / 4);//自己放在右边
 
         gamePanel.add(capturingBoardHe);
         gamePanel.add(capturingBoardMe);
@@ -197,19 +201,19 @@ public class ChessGameFrame extends JFrame {
      */
     private void addGameLabel() {
         statusLabel = new JLabel("RED's TURN");
-        statusLabel.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT / 20);
+        statusLabel.setLocation(WIDTH / 5, HEIGHT / 40);
         statusLabel.setSize(200, 60);
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(statusLabel);
 
         scoreOfBlack = new JLabel(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
-        scoreOfBlack.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *2/ 20);
+        scoreOfBlack.setLocation(WIDTH / 5, HEIGHT *3/ 40);
         scoreOfBlack.setSize(200, 60);
         scoreOfBlack.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(scoreOfBlack);
 
         scoreOfRed = new JLabel(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
-        scoreOfRed.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *3/ 20);
+        scoreOfRed.setLocation(WIDTH / 5, HEIGHT *5/ 40);
         scoreOfRed.setSize(200, 60);
         scoreOfRed.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(scoreOfRed);
@@ -219,13 +223,25 @@ public class ChessGameFrame extends JFrame {
         return statusLabel;
     }
 
-    private void addGameLoadButton() {
+    public void loadPVCButtons()
+    {
+        PVCButtonsPanel.setBackground(Color.WHITE);
+        PVCButtonsPanel.setLayout(null);
+        PVCButtonsPanel.setSize(230,290);
+        PVCButtonsPanel.setLocation(WIDTH * 4 / 5, HEIGHT *2/ 20);
+
+        loadGameLoadButton();
+        loadCheatingModeButton();
+        loadRestartButton();
+        loadWithdrawButton();
+    }
+    private void loadGameLoadButton() {
         JButton button = new JButton("Load");
-        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *5/ 20);
+        button.setLocation(0, 0);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         button.setBackground(Color.LIGHT_GRAY);
-        gamePanel.add(button);
+        PVCButtonsPanel.add(button);
 
         button.addActionListener(e -> {
             System.out.println("Click load");
@@ -235,7 +251,7 @@ public class ChessGameFrame extends JFrame {
     }
 
     public static JButton cheatingButton = new JButton("Cheating Mode: OFF");
-    private void addCheatingModeButton() {//todo
+    private void loadCheatingModeButton() {//todo
         cheatingButton.addActionListener((e) -> {
             if(cheatingButton.getText().equals("Cheating Mode: OFF")) {
                 cheatingButton.setText("Cheating Mode: ON");
@@ -248,34 +264,37 @@ public class ChessGameFrame extends JFrame {
                 isCheatingMode=false;
             }
         });
-        cheatingButton.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *7 / 20);
+        cheatingButton.setLocation(0, HEIGHT /10);
         cheatingButton.setSize(230, 60);
         cheatingButton.setFont(new Font("宋体", Font.BOLD, 20));
-        gamePanel.add(cheatingButton);
+        PVCButtonsPanel.add(cheatingButton);
     }
 
-    private void addRestartButton() {
+    private void loadRestartButton() {
         JButton button = new JButton("RESTART");
         button.addActionListener((e) -> {
-            String[] options={"Menu","Restart!","Cancel"};
+            String[] options={"Restart!","Cancel"};
             int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to restart?"
-                    ,"From Judge",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+                    ,"From Judge",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
             if(choice==0){//菜单
-                ChessGameFrame.gamePanel.setEnabled(false);
-                ChessGameFrame.gamePanel.setVisible(false);
-                Handler.mainFrame.setContentPane(ChessGameFrame.menuPanel);
-                ChessGameFrame.menuPanel.setEnabled(true);
-                ChessGameFrame.menuPanel.setVisible(true);
+                gamePanel.setEnabled(false);
+                gamePanel.setVisible(false);
+                PVCButtonsPanel.setEnabled(false);
+                PVCButtonsPanel.setVisible(false);
+                menuPanel.setEnabled(true);
+                menuPanel.setVisible(true);
+                gamePanel.remove(PVCButtonsPanel);
+                setContentPane(ChessGameFrame.menuPanel);
             }
             else if(choice==1){
                 chessboard.initAllChessOnBoard();//restart!
                 ChessGameFrame.repaintAll();
             }
         });
-        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *9 /20 );
+        button.setLocation(0, HEIGHT *2/10 );
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
-        gamePanel.add(button);
+        PVCButtonsPanel.add(button);
     }
 
     public static JButton withdrawButton = new JButton("Cheating Mode: OFF");
@@ -368,16 +387,16 @@ public class ChessGameFrame extends JFrame {
         if(ope.empty())
             withdrawButton.setEnabled(false);
     }
-    private void addWithdrawButton() {
+    private void loadWithdrawButton() {
         withdrawButton.setText("withdraw");
         withdrawButton.setEnabled(false);
         withdrawButton.addActionListener((e) -> {
             withdraw();
         });
-        withdrawButton.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *11 / 20);
+        withdrawButton.setLocation(0, HEIGHT *3 / 10);
         withdrawButton.setSize(180, 60);
         withdrawButton.setFont(new Font("宋体", Font.BOLD, 20));
-        gamePanel.add(withdrawButton);
+        PVCButtonsPanel.add(withdrawButton);
     }
 
     private void addGameEscapeButton() {
@@ -389,12 +408,15 @@ public class ChessGameFrame extends JFrame {
             if(choice==0){//菜单
                 gamePanel.setEnabled(false);
                 gamePanel.setVisible(false);
-                setContentPane(menuPanel);
+                PVCButtonsPanel.setEnabled(false);
+                PVCButtonsPanel.setVisible(false);
                 menuPanel.setEnabled(true);
                 menuPanel.setVisible(true);
+                gamePanel.remove(PVCButtonsPanel);
+                setContentPane(ChessGameFrame.menuPanel);
             }
         });
-        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *13 / 20);
+        button.setLocation(WIDTH * 4 / 5, HEIGHT *13 / 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);
@@ -404,7 +426,7 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener((e) -> {
             setExtendedState(JFrame.ICONIFIED);
         });
-        button.setLocation(WIDTH * 4 / 5 + shiftConst1, HEIGHT *15 / 20);
+        button.setLocation(WIDTH * 4 / 5, HEIGHT *15 / 20);
         button.setSize(180, 60);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(button);

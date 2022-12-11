@@ -128,11 +128,14 @@ public class ClickController {
                 ,pl.getColor().equals(Color.BLACK)? "BLACK":"RED" +" has won!"
                 ,"Game over!",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
         if(choice==0){//菜单
-            ChessGameFrame.gamePanel.setEnabled(false);
-            ChessGameFrame.gamePanel.setVisible(false);
+            gamePanel.setEnabled(false);
+            gamePanel.setVisible(false);
+            PVCButtonsPanel.setEnabled(false);
+            PVCButtonsPanel.setVisible(false);
+            menuPanel.setEnabled(true);
+            menuPanel.setVisible(true);
+            gamePanel.remove(PVCButtonsPanel);
             Handler.mainFrame.setContentPane(ChessGameFrame.menuPanel);
-            ChessGameFrame.menuPanel.setEnabled(true);
-            ChessGameFrame.menuPanel.setVisible(true);
         }
         else {
             chessboard.initAllChessOnBoard();//restart!

@@ -39,7 +39,7 @@ public class Chessboard extends JComponent {
     public static Stack<Integer> capturingIsMe=new Stack<>(),capturingLabel=new Stack<>();
     public static boolean isCheatingMode=false;
     public static Players mePlayer;
-    public static int mode;//0人机1玩家对战
+    public static int menuMode;//0人机1玩家对战
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
         setSize(width + 2, height);
@@ -139,9 +139,9 @@ public class Chessboard extends JComponent {
         ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
         ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
         ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
-        if(mode==0)
+        if(menuMode ==0)
             ChessGameFrame.contendFirstInPVC();
-        else if(mode==1)
+        else if(menuMode ==1)
             ChessGameFrame.contendFirstInPVP();
         if(capturingBoardHe!=null)
             capturingBoardHe.initAllCapturingChessOnBoard(mePlayer.getColor().equals(Color.RED) ?0:1);

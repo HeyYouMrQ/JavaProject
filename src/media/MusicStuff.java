@@ -1,4 +1,4 @@
-package Media;
+package media;
 import javax.sound.sampled.*;
 import java.io.File;
 public class MusicStuff
