@@ -1,8 +1,17 @@
 package media;
-import javax.sound.sampled.*;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.io.File;
+import java.net.URL;
+
 public class MusicStuff
 {
+    public static enum Volume {
+        MUTE, LOW, MEDIUM, HIGH
+    }
+    public static Volume volume = Volume.LOW;
     public void playMusic(String musicLocation)
     {
         try
@@ -10,11 +19,14 @@ public class MusicStuff
             File musicPath = new File(musicLocation);
             if (musicPath.exists())
             {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+                URL url = this.getClass().getClassLoader().getResource(musicLocation);
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(url);
+                //AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInput);
                 clip.start();
                 clip.loop(Clip.LOOP_CONTINUOUSLY);
+                //if (clip.isRunning()) clip.stop();
             }
         }
         catch(Exception ex)

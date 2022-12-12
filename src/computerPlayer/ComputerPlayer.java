@@ -1,10 +1,8 @@
 package computerPlayer;
 
 import chessComponent.CannonChessComponent;
-import chessComponent.SoldierChessComponent;
 import chessComponent.SquareComponent;
 import model.ChessColor;
-import model.ChessboardPoint;
 import view.Chessboard;
 
 import java.awt.*;
@@ -69,17 +67,15 @@ public class ComputerPlayer extends Thread
                         }
                     }
                 }
-                chessboard.clickController.onClick(firChess);//取消选取
+                if(firChess.isSelected())
+                    chessboard.clickController.onClick(firChess);//取消选取
             }
         }
     }
     private void playMode1()
     {
         int maxScore=0;//记录结果
-        SquareComponent fromChess=new SoldierChessComponent(new ChessboardPoint(0, 0), new Point(),
-            ChessColor.RED, chessboard.clickController, 0),
-                toChess=new SoldierChessComponent(new ChessboardPoint(0, 0), new Point(),
-            ChessColor.RED, chessboard.clickController, 0);
+        SquareComponent fromChess=null,toChess=null;//=null是不能去掉的！不然会报错
         SquareComponent firChess,secChess;//过程变量
         for(int i=0;i<=7;i++)
             for(int j=0;j<=3;j++)
@@ -87,7 +83,8 @@ public class ComputerPlayer extends Thread
                 firChess = chessboard.getChessComponents()[i][j];
                 if (firChess.isReversal() && firChess.getChessColor().equals(Chessboard.getCurrentColor()))//可选中
                 {
-                    chessboard.clickController.onClick(firChess);
+                    if(!firChess.isSelected())
+                        chessboard.clickController.onClick(firChess);
                     ArrayList<shift> ar = new ArrayList<>();
                     if (!(firChess instanceof CannonChessComponent))
                     {
@@ -127,7 +124,8 @@ public class ComputerPlayer extends Thread
                             }
                         }
                     }
-                    chessboard.clickController.onClick(firChess);//取消选取
+                    if(firChess.isSelected())
+                        chessboard.clickController.onClick(firChess);//取消选取
                 }
             }
         if(maxScore>0)
