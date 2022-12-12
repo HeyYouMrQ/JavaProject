@@ -134,11 +134,11 @@ public class Chessboard extends JComponent {
         currentColor = ChessColor.RED;
         redPlayer.setCurrentScore(0);
         blackPlayer.setCurrentScore(0);
-        cheatingButton.setText("Cheating Mode: OFF");
+        cheatingButton.setText("作弊模式：关");
         isCheatingMode=false;
-        ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
-        ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
-        ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
+        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", Chessboard.getCurrentColor().getName()));
+        ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的得分是： %d", Chessboard.blackPlayer.getCurrentScore()));
+        ChessGameFrame.getScoreOfRed().setText(String.format("红方的得分是 %d", Chessboard.redPlayer.getCurrentScore()));
         if(menuMode ==0)
             ChessGameFrame.contendFirstInPVC();
         else if(menuMode ==1)

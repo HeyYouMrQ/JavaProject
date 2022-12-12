@@ -14,12 +14,11 @@ import java.util.Random;
 
 import static view.ChessGameFrame.chessboard;
 import static view.ChessGameFrame.withdrawButton;
-import static view.Chessboard.canListenToMe;
-import static view.Chessboard.mePlayer;
+import static view.Chessboard.*;
 import static view.Handler.mainFrame;
 public class ComputerPlayer extends Thread
 {
-    public static boolean stop;
+    public static boolean stop=true;
     private static int difficultyMode=0;//0随机1贪心
     private final shift up=new shift(-1,0),down= new shift(1,0),
                 left=new shift(0,-1),right=new shift(0,1);
@@ -42,7 +41,7 @@ public class ComputerPlayer extends Thread
             if(chessboard.clickController.onClick(firChess)!=0)
             {
                 if(Chessboard.getCurrentColor().equals(mePlayer.getColor().equals(Color.RED)? ChessColor.RED: ChessColor.BLACK)) return;//翻开
-                try {sleep(400);} catch (InterruptedException ex) {}
+                try {sleep(500);} catch (InterruptedException ex) {}
                 ArrayList<shift>ar=new ArrayList<>();
                 if(!(firChess instanceof CannonChessComponent))
                 {
@@ -134,7 +133,7 @@ public class ComputerPlayer extends Thread
         if(maxScore>0)
         {
             chessboard.clickController.onClick(fromChess);
-            try {sleep(400);} catch (InterruptedException ex) {}
+            try {sleep(500);} catch (InterruptedException ex) {}
             chessboard.clickController.onClick(toChess);
         }
         else
@@ -142,17 +141,15 @@ public class ComputerPlayer extends Thread
     }
     private void handlePlay()
     {
-        withdrawButton.setEnabled(false);
         canListenToMe=false;
         mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        try {sleep(400);} catch (InterruptedException ex) {}
+        try {sleep(500);} catch (InterruptedException ex) {}
         if(difficultyMode==0)
             playMode0();
         else if(difficultyMode==1)
             playMode1();
         canListenToMe=true;
         mainFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        withdrawButton.setEnabled(true);
     }
     public static void setDifficultyMode(int diffMode) {
         difficultyMode=diffMode;
@@ -160,14 +157,15 @@ public class ComputerPlayer extends Thread
     @Override
     public void run() {
         stop=false;
+        withdrawButton.setEnabled(false);
         while (true)
         {
             if (stop) break;
             if(Chessboard.getCurrentColor()!=(mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
                 handlePlay();
-            try {sleep(1000);} catch (InterruptedException ex) {}
+            try {sleep(50);} catch (InterruptedException ex) {}
         }
-        System.out.println("HEY CLOSED");
-        return;
+        if(!ope.empty())
+            withdrawButton.setEnabled(true);
     }
 }

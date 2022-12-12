@@ -89,8 +89,8 @@ public class ChessGameFrame extends JFrame {
     }
     public static void contendFirstInPVC()
     {
-        String[] options={"Yes","No"};
-        int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Do you want to start first?","From Judge"
+        String[] options={"是","否"};
+        int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"你想要先手吗？","裁判问："
                 ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
         if(choice==0)
             Chessboard.mePlayer=Chessboard.redPlayer;
@@ -98,7 +98,7 @@ public class ChessGameFrame extends JFrame {
             Chessboard.mePlayer=Chessboard.blackPlayer;
     }
     private void addPVCButton() {
-        JButton button = new JButton("Player vs Computer");
+        JButton button = new JButton("人机对战");
         button.setLocation(WIDTH * 2 / 5 , HEIGHT *4/ 20);
         button.setSize(WIDTH/5, HEIGHT /12);
         button.setFont(new Font("宋体", Font.BOLD, 20));
@@ -128,7 +128,7 @@ public class ChessGameFrame extends JFrame {
         //todo
     }
     private void addPVPButton() {//todo
-        JButton button = new JButton("Player vs Player");
+        JButton button = new JButton("玩家对战");
         button.setLocation(WIDTH * 2 / 5 , HEIGHT *8/ 20);
         button.setSize(WIDTH/5, HEIGHT /12);
         button.setFont(new Font("宋体", Font.BOLD, 20));
@@ -140,10 +140,10 @@ public class ChessGameFrame extends JFrame {
         });
     }
     private void addMenuExitButton() {
-        JButton button = new JButton("EXIT");
+        JButton button = new JButton("退出");
         button.addActionListener((e) -> {
-            String[] options={"Yes","Cancel"};
-            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to exit?","From Judge"
+            String[] options={"是","取消"};
+            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"确定退出吗","裁判问："
                     ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
             if(choice==0){//菜单 todo
                 System.exit(0);
@@ -155,7 +155,7 @@ public class ChessGameFrame extends JFrame {
         menuPanel.add(button);
     }
     private void addMenuMinimize() {
-        JButton button = new JButton("MINIMIZE");
+        JButton button = new JButton("最小化窗口");
         button.addActionListener((e) -> {
             setExtendedState(JFrame.ICONIFIED);
         });
@@ -202,19 +202,19 @@ public class ChessGameFrame extends JFrame {
      * 在游戏窗体中添加标签
      */
     private void addGameLabel() {
-        statusLabel = new JLabel("RED's TURN");
+        statusLabel = new JLabel("轮到红方了");
         statusLabel.setLocation(WIDTH / 5, HEIGHT / 40);
         statusLabel.setSize(WIDTH/6, HEIGHT /12);
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(statusLabel);
 
-        scoreOfBlack = new JLabel(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
+        scoreOfBlack = new JLabel(String.format("黑方的分数是： %d", Chessboard.blackPlayer.getCurrentScore()));
         scoreOfBlack.setLocation(WIDTH / 5, HEIGHT *3/ 40);
         scoreOfBlack.setSize(WIDTH/6, HEIGHT /12);
         scoreOfBlack.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(scoreOfBlack);
 
-        scoreOfRed = new JLabel(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
+        scoreOfRed = new JLabel(String.format("红方的分数是： %d", Chessboard.redPlayer.getCurrentScore()));
         scoreOfRed.setLocation(WIDTH / 5, HEIGHT *5/ 40);
         scoreOfRed.setSize(WIDTH/6, HEIGHT /12);
         scoreOfRed.setFont(new Font("宋体", Font.BOLD, 20));
@@ -236,10 +236,11 @@ public class ChessGameFrame extends JFrame {
         loadCheatingModeButton();
         loadRestartButton();
         loadWithdrawButton();
+        loadComputerPlayerButton();
         loadSetDifficultyButton();
     }
     private void loadGameLoadButton() {
-        JButton button = new JButton("Load");
+        JButton button = new JButton("载入");
         button.setLocation(0, 0);
         button.setSize(WIDTH*11/60, HEIGHT/12);
         button.setFont(new Font("宋体", Font.BOLD, 20));
@@ -248,21 +249,21 @@ public class ChessGameFrame extends JFrame {
 
         button.addActionListener(e -> {
             System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this, "Input Path here");
+            String path = JOptionPane.showInputDialog(this, "输入路径：");
             gameController.loadGameFromFile(path);
         });
     }
 
-    public static JButton cheatingButton = new JButton("Cheating Mode: OFF");
+    public static JButton cheatingButton = new JButton("作弊模式：关");
     private void loadCheatingModeButton() {
         cheatingButton.addActionListener((e) -> {
-            if(cheatingButton.getText().equals("Cheating Mode: OFF")) {
-                cheatingButton.setText("Cheating Mode: ON");
+            if(cheatingButton.getText().equals("作弊模式：关")) {
+                cheatingButton.setText("作弊模式：开");
                 cheatingButton.repaint();
                 isCheatingMode=true;
             }
             else {
-                cheatingButton.setText("Cheating Mode: OFF");
+                cheatingButton.setText("作弊模式：关");
                 cheatingButton.repaint();
                 isCheatingMode=false;
             }
@@ -274,11 +275,11 @@ public class ChessGameFrame extends JFrame {
     }
 
     private void loadRestartButton() {
-        JButton button = new JButton("RESTART");
+        JButton button = new JButton("重开");
         button.addActionListener((e) -> {
-            String[] options={"Restart!","Cancel"};
-            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to restart?"
-                    ,"From Judge",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+            String[] options={"重开","取消"};
+            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"确定重开吗？"
+                    ,"裁判问：",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
             if(choice==0){
                 ComputerPlayer.stop=true;
                 chessboard.initAllChessOnBoard();//restart!
@@ -293,7 +294,7 @@ public class ChessGameFrame extends JFrame {
         PVCButtonsPanel.add(button);
     }
 
-    public static JButton withdrawButton = new JButton("Cheating Mode: OFF");
+    public static JButton withdrawButton = new JButton("作弊模式：关");
     private void withdraw()
     {
         SquareComponent firChess = chessboard.getChessComponents()[firX.peek()][firY.peek()];
@@ -374,7 +375,7 @@ public class ChessGameFrame extends JFrame {
             }
         }
         Chessboard.setCurrentColor(Chessboard.getCurrentColor().equals(ChessColor.RED)?ChessColor.BLACK:ChessColor.RED);
-        ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
+        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", Chessboard.getCurrentColor().getName()));
         ope.pop();
         firCom.pop();   firCol.pop();   firX.pop(); firY.pop();
         secCom.pop();   secCol.pop();   secX.pop(); secY.pop(); firCannonSecRev.pop();
@@ -384,7 +385,7 @@ public class ChessGameFrame extends JFrame {
             withdrawButton.setEnabled(false);
     }
     private void loadWithdrawButton() {
-        withdrawButton.setText("withdraw");
+        withdrawButton.setText("悔棋");
         withdrawButton.setEnabled(false);
         withdrawButton.addActionListener((e) -> {
             withdraw();
@@ -394,32 +395,53 @@ public class ChessGameFrame extends JFrame {
         withdrawButton.setFont(new Font("宋体", Font.BOLD, 20));
         PVCButtonsPanel.add(withdrawButton);
     }
-
+    private void loadComputerPlayerButton()//是否开启
+    {
+        JButton button = new JButton("开");
+        button.addActionListener((e) -> {
+            if(button.getText().equals("开")) {
+                button.setText("关");
+                button.repaint();
+                ComputerPlayer.stop=true;
+            }
+            else {
+                button.setText("开");
+                button.repaint();
+                ComputerPlayer.stop=false;
+                computerPlayer=new ComputerPlayer();
+                computerPlayer.start();
+            }
+        });
+        button.setLocation(0, HEIGHT *4/10);
+        button.setSize(WIDTH /12, HEIGHT/12);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        PVCButtonsPanel.add(button);
+    }
     private void loadSetDifficultyButton()
     {
-        JButton button = new JButton("NORMAL");
+        JButton button = new JButton("简单");
         button.addActionListener((e) -> {
-            if(button.getText().equals("NORMAL")) {
-                button.setText("DIFFICULT");
+            if(button.getText().equals("简单")) {
+                button.setText("困难");
                 button.repaint();
                 ComputerPlayer.setDifficultyMode(1);
             }
             else {
-                button.setText("NORMAL");
+                button.setText("简单");
                 button.repaint();
                 ComputerPlayer.setDifficultyMode(0);
             }
         });
-        button.setLocation(0, HEIGHT *4/10);
-        button.setSize(WIDTH*11/60, HEIGHT/12);
+        button.setLocation(WIDTH/10, HEIGHT *4/10);
+        button.setSize(WIDTH/12, HEIGHT/12);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         PVCButtonsPanel.add(button);
     }
     private void addGameEscapeButton() {
-        JButton button = new JButton("ESCAPE");
+        JButton button = new JButton("逃跑");
         button.addActionListener((e) -> {
-            String[] options={"Yes","Cancel"};
-            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"Confirm to escape from this game?","From Judge"
+            String[] options={"是","取消"};
+            int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"确定要逃离这局游戏吗？","裁判问："
                     ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
             if(choice==0){//菜单
                 gamePanel.setEnabled(false);
@@ -438,7 +460,7 @@ public class ChessGameFrame extends JFrame {
         gamePanel.add(button);
     }
     private void addGameMinimize() {
-        JButton button = new JButton("MINIMIZE");
+        JButton button = new JButton("最小化窗口");
         button.addActionListener((e) -> {
             setExtendedState(JFrame.ICONIFIED);
         });

@@ -36,7 +36,8 @@ public class ClickController {
         firX.push(fir.getChessboardPoint().getX()); firY.push(fir.getChessboardPoint().getY());
         secCom.push(null);   secCol.push(null);   secX.push(null); secY.push(null); firCannonSecRev.push(null);
         capturingIsMe.push(null);capturingLabel.push(null);
-        withdrawButton.setEnabled(true);
+        if(ComputerPlayer.stop)
+            withdrawButton.setEnabled(true);
     }
     public void recordWithdraw(SquareComponent fir,SquareComponent sec,int rev,int meIsEaten,int label)
     {
@@ -47,7 +48,8 @@ public class ClickController {
         secX.push(sec.getChessboardPoint().getX()); secY.push(sec.getChessboardPoint().getY());
         firCannonSecRev.push(rev);
         capturingIsMe.push(meIsEaten);capturingLabel.push(label);
-        withdrawButton.setEnabled(true);
+        if(ComputerPlayer.stop)
+            withdrawButton.setEnabled(true);
     }
     public boolean canChangeCursor(SquareComponent squareComponent)
     {
@@ -139,10 +141,10 @@ public class ClickController {
     private void hasWinner(Players pl)
     {
         ComputerPlayer.stop=true;
-        String[] options={"Menu","Restart!"};
+        String[] options={"菜单","重开"};
         int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame()
-                ,pl.getColor().equals(Color.BLACK)? "BLACK":"RED" +" has won!"
-                ,"Game over!",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
+                ,(pl.getColor().equals(Color.BLACK)? "黑方":"红方")+" 赢了！"
+                ,"游戏结束！",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
         if(choice==0){//菜单
             gamePanel.setEnabled(false);
             gamePanel.setVisible(false);
@@ -168,9 +170,9 @@ public class ClickController {
     }
     public void swapPlayer() {
         Chessboard.setCurrentColor(Chessboard.getCurrentColor() == ChessColor.BLACK ? ChessColor.RED : ChessColor.BLACK);
-        ChessGameFrame.getStatusLabel().setText(String.format("%s's TURN", Chessboard.getCurrentColor().getName()));
-        ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
-        ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
+        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", Chessboard.getCurrentColor().getName()));
+        ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的分数是： %d", Chessboard.blackPlayer.getCurrentScore()));
+        ChessGameFrame.getScoreOfRed().setText(String.format("红方的分数是： %d", Chessboard.redPlayer.getCurrentScore()));
         ckeckWinner();
     }
 }
