@@ -43,13 +43,15 @@ public class CannonChessComponent extends ChessComponent {
         else return false;
     }
     @Override
-    public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
-        SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
+    public boolean canMoveTo(Chessboard chessboard,SquareComponent[][] sqcs, ChessboardPoint destination) {
+        SquareComponent destinationChess = sqcs[destination.getX()][destination.getY()];
         if(! destinationChess.isReversal)
-            return (!(destinationChess instanceof EmptySlotComponent)) && screenOK(chessboard,destination);
+            return (!(destinationChess instanceof EmptySlotComponent)) && screenOK(sqcs,destination);
         else//翻开了
-            return (!(destinationChess instanceof EmptySlotComponent)) && screenOK(chessboard,destination)
-                    && destinationChess.getChessColor() != Chessboard.getCurrentColor();
+        {
+            return (!(destinationChess instanceof EmptySlotComponent)) && screenOK(sqcs,destination)
+                    && destinationChess.getChessColor() != chessboard.getCurrentColor();
+        }
         //todo: complete this method
     }
 }

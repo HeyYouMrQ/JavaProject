@@ -9,7 +9,7 @@ public class CapturingChess extends JComponent {
     protected static final Font CHESS_FONT = new Font("宋体", Font.BOLD, 36);
     protected static final Font NUM_FONT = new Font("宋体", Font.BOLD, 20);
     private static int spacingLength;
-    private final ChessColor chessColor;
+    private ChessColor chessColor;
     public int label;//0-6:将士相车马兵炮 7:空
     public int num=0;//个数
     public CapturingChess(int label, Point location, ChessColor chessColor, int size)

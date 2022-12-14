@@ -14,40 +14,39 @@ import javax.swing.*;
 import java.awt.*;
 
 import static view.ChessGameFrame.*;
-import static view.Chessboard.*;
 
 public class ClickController {
-    private final Chessboard chessboard;
+    private Chessboard chessboard;
     private SquareComponent first;
     public ClickController(Chessboard chessboard) {
         this.chessboard = chessboard;
     }
     private boolean isComputerOperating()//如果是机器正在操作，则返回真
     {
-        if(ChessGameFrame.menuMode==0 && Chessboard.getCurrentColor()!=(mePlayer.getColor().equals(Color.RED)?
+        if(!ComputerPlayer.stop && ChessGameFrame.menuMode==0 && chessboard.getCurrentColor()!=(chessboard.mePlayer.getColor().equals(Color.RED)?
                 ChessColor.RED:ChessColor.BLACK))
             return true;
         else return false;
     }
     public void recordWithdraw(SquareComponent fir)
     {
-        ope.push(1);
-        firCom.push(null);/*0-6:将士相车马兵炮 7:空 */  firCol.push(null);
-        firX.push(fir.getChessboardPoint().getX()); firY.push(fir.getChessboardPoint().getY());
-        secCom.push(null);   secCol.push(null);   secX.push(null); secY.push(null); firCannonSecRev.push(null);
-        capturingIsMe.push(null);capturingLabel.push(null);
+        chessboard.ope.push(1);
+        chessboard.firCom.push(-1);/*0-6:将士相车马兵炮 7:空 */  chessboard.firCol.push(-1);
+        chessboard.firX.push(fir.getChessboardPoint().getX()); chessboard.firY.push(fir.getChessboardPoint().getY());
+        chessboard.secCom.push(-1);   chessboard.secCol.push(-1);   chessboard.secX.push(-1); chessboard.secY.push(-1); chessboard.firCannonSecRev.push(-1);
+        chessboard.capturingIsMe.push(-1);chessboard.capturingLabel.push(-1);
         if(ComputerPlayer.stop)
             withdrawButton.setEnabled(true);
     }
     public void recordWithdraw(SquareComponent fir,SquareComponent sec,int rev,int meIsEaten,int label)
     {
-        ope.push(2);
-        firCom.push(fir.label);/*0-6:将士相车马兵炮 7:空 */  firCol.push(fir.getChessColor().equals(ChessColor.RED)?0:1);//0红1黑
-        firX.push(fir.getChessboardPoint().getX()); firY.push(fir.getChessboardPoint().getY());
-        secCom.push(sec.label);   secCol.push(sec.getChessColor().equals(ChessColor.RED)?0:1);
-        secX.push(sec.getChessboardPoint().getX()); secY.push(sec.getChessboardPoint().getY());
-        firCannonSecRev.push(rev);
-        capturingIsMe.push(meIsEaten);capturingLabel.push(label);
+        chessboard.ope.push(2);
+        chessboard.firCom.push(fir.label);/*0-6:将士相车马兵炮 7:空 */  chessboard.firCol.push(fir.getChessColor().equals(ChessColor.RED)?0:1);//0红1黑
+        chessboard.firX.push(fir.getChessboardPoint().getX()); chessboard.firY.push(fir.getChessboardPoint().getY());
+        chessboard.secCom.push(sec.label);   chessboard.secCol.push(sec.getChessColor().equals(ChessColor.RED)?0:1);
+        chessboard.secX.push(sec.getChessboardPoint().getX()); chessboard.secY.push(sec.getChessboardPoint().getY());
+        chessboard.firCannonSecRev.push(rev);
+        chessboard.capturingIsMe.push(meIsEaten);chessboard.capturingLabel.push(label);
         if(ComputerPlayer.stop)
             withdrawButton.setEnabled(true);
     }
@@ -69,7 +68,7 @@ public class ClickController {
                 chessboard.clickController.swapPlayer();
                 return 2;
             }
-            else if(squareComponent.isReversal() && squareComponent.getChessColor() .equals(Chessboard.getCurrentColor()))
+            else if(squareComponent.isReversal() && squareComponent.getChessColor() .equals(chessboard.getCurrentColor()))
             {//选定同颜色的已翻开的
                 squareComponent.setSelected(true);
                 first = squareComponent;
@@ -91,8 +90,8 @@ public class ClickController {
                 if(squareComponent.label!=7)
                 {
                     ChessColor eatenColor=squareComponent.getChessColor();
-                    boolean meIsEaten=mePlayer.getColor().equals(eatenColor.equals(ChessColor.RED)?Color.RED:Color.BLACK);
-                    CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
+                    boolean meIsEaten=chessboard.mePlayer.getColor().equals(eatenColor.equals(ChessColor.RED)?Color.RED:Color.BLACK);
+                    CapturingBoard change=meIsEaten?chessboard.capturingBoardHe:chessboard.capturingBoardMe;
                     change.capturingChesses[squareComponent.label].num++;
                     change.capturingChesses[squareComponent.label].repaint();
                     recordWithdraw(first,squareComponent,squareComponent.isReversal()?0:1,meIsEaten?1:0,squareComponent.label);
@@ -119,7 +118,7 @@ public class ClickController {
                 chessboard.clickController.swapPlayer();
                 return 2;
             }
-            else if (!isComputerOperating() && squareComponent.isReversal() && squareComponent.getChessColor() == Chessboard.getCurrentColor())
+            else if (!isComputerOperating() && squareComponent.isReversal() && squareComponent.getChessColor() == chessboard.getCurrentColor())
             {//换选(为了观感体验，机器不允许这样)
                 squareComponent.setSelected(true);
                 first.setSelected(false);
@@ -136,7 +135,7 @@ public class ClickController {
      * @return first棋子是否能够移动到second棋子位置
      */
     public boolean handleSecond(SquareComponent squareComponent) {//空棋子的isReversal是false！
-        return first.canMoveTo(chessboard.getChessComponents(), squareComponent.getChessboardPoint());
+        return first.canMoveTo(chessboard,chessboard.getChessComponents(), squareComponent.getChessboardPoint());
     }
     private void hasWinner(Players pl)
     {
@@ -156,23 +155,23 @@ public class ClickController {
             Handler.mainFrame.setContentPane(ChessGameFrame.menuPanel);
         }
         else {
-            chessboard.initAllChessOnBoard();//restart!
+            chessboard.initAllChessOnBoard(0);//restart!
             ChessGameFrame.repaintAll();
             computerPlayer=new ComputerPlayer();
             computerPlayer.start();
         }
     }
     private void ckeckWinner() {
-        if(Chessboard.blackPlayer.getCurrentScore()>=60)
-            hasWinner(Chessboard.blackPlayer);
-        else if(Chessboard.redPlayer.getCurrentScore()>=60)
-            hasWinner(Chessboard.redPlayer);
+        if(chessboard.blackPlayer.getCurrentScore()>=60)
+            hasWinner(chessboard.blackPlayer);
+        else if(chessboard.redPlayer.getCurrentScore()>=60)
+            hasWinner(chessboard.redPlayer);
     }
     public void swapPlayer() {
-        Chessboard.setCurrentColor(Chessboard.getCurrentColor() == ChessColor.BLACK ? ChessColor.RED : ChessColor.BLACK);
-        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", Chessboard.getCurrentColor().getName()));
-        ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的分数是： %d", Chessboard.blackPlayer.getCurrentScore()));
-        ChessGameFrame.getScoreOfRed().setText(String.format("红方的分数是： %d", Chessboard.redPlayer.getCurrentScore()));
+        chessboard.setCurrentColor(chessboard.getCurrentColor() == ChessColor.BLACK ? ChessColor.RED : ChessColor.BLACK);
+        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", chessboard.getCurrentColor().getName()));
+        ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的分数是： %d", chessboard.blackPlayer.getCurrentScore()));
+        ChessGameFrame.getScoreOfRed().setText(String.format("红方的分数是： %d", chessboard.redPlayer.getCurrentScore()));
         ckeckWinner();
     }
 }

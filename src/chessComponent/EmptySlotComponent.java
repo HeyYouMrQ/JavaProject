@@ -3,6 +3,7 @@ package chessComponent;
 import controller.ClickController;
 import model.ChessColor;
 import model.ChessboardPoint;
+import view.Chessboard;
 
 import java.awt.*;
 
@@ -18,7 +19,7 @@ public class EmptySlotComponent extends SquareComponent {
     }
 
     @Override
-    public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
+    public boolean canMoveTo(Chessboard chessboard, SquareComponent[][] sqcs, ChessboardPoint destination) {
         return false;
     }
 

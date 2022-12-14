@@ -3,7 +3,6 @@ package computerPlayer;
 import chessComponent.CannonChessComponent;
 import chessComponent.SquareComponent;
 import model.ChessColor;
-import view.Chessboard;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.Random;
 
 import static view.ChessGameFrame.chessboard;
 import static view.ChessGameFrame.withdrawButton;
-import static view.Chessboard.*;
+import static view.Chessboard.canListenToMe;
 import static view.Handler.mainFrame;
 public class ComputerPlayer extends Thread
 {
@@ -31,14 +30,14 @@ public class ComputerPlayer extends Thread
     }
     private void playMode0()
     {
-        while(Chessboard.getCurrentColor()!=(mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
+        while(chessboard.getCurrentColor()!=(chessboard.mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
         {
             Random r=new Random();
             int rx=r.nextInt(8),ry=r.nextInt(4);
             SquareComponent firChess=chessboard.getChessComponents()[rx][ry];
             if(chessboard.clickController.onClick(firChess)!=0)
             {
-                if(Chessboard.getCurrentColor().equals(mePlayer.getColor().equals(Color.RED)? ChessColor.RED: ChessColor.BLACK)) return;//翻开
+                if(chessboard.getCurrentColor().equals(chessboard.mePlayer.getColor().equals(Color.RED)? ChessColor.RED: ChessColor.BLACK)) return;//翻开
                 try {sleep(500);} catch (InterruptedException ex) {}
                 ArrayList<shift>ar=new ArrayList<>();
                 if(!(firChess instanceof CannonChessComponent))
@@ -81,7 +80,7 @@ public class ComputerPlayer extends Thread
             for(int j=0;j<=3;j++)
             {
                 firChess = chessboard.getChessComponents()[i][j];
-                if (firChess.isReversal() && firChess.getChessColor().equals(Chessboard.getCurrentColor()))//可选中
+                if (firChess.isReversal() && firChess.getChessColor().equals(chessboard.getCurrentColor()))//可选中
                 {
                     if(!firChess.isSelected())
                         chessboard.clickController.onClick(firChess);
@@ -112,7 +111,7 @@ public class ComputerPlayer extends Thread
                             while (nx >= 0 && nx <= 7 && ny >= 0 && ny <= 3)
                             {
                                 if (chessboard.getChessComponents()[nx][ny].score>maxScore &&
-                                        chessboard.getChessComponents()[nx][ny].getChessColor().equals(mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK)
+                                        chessboard.getChessComponents()[nx][ny].getChessColor().equals(chessboard.mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK)
                                 && chessboard.clickController.handleSecond(chessboard.getChessComponents()[nx][ny]))
                                 {
                                     maxScore=chessboard.getChessComponents()[nx][ny].score;
@@ -159,11 +158,11 @@ public class ComputerPlayer extends Thread
         while (true)
         {
             if (stop) break;
-            if(Chessboard.getCurrentColor()!=(mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
+            if(chessboard.getCurrentColor()!=(chessboard.mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
                 handlePlay();
-            try {sleep(50);} catch (InterruptedException ex) {}
+            try {sleep(200);} catch (InterruptedException ex) {}
         }
-        if(!ope.empty())
+        if(!chessboard.ope.empty())
             withdrawButton.setEnabled(true);
     }
 }

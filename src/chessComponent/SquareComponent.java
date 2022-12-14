@@ -3,6 +3,7 @@ package chessComponent;
 import controller.ClickController;
 import model.ChessColor;
 import model.ChessboardPoint;
+import view.ChessGameFrame;
 import view.Chessboard;
 
 import javax.swing.*;
@@ -128,15 +129,15 @@ public abstract class SquareComponent extends JComponent {
     }
 
     /**
-     * @param chessboard  棋盘
+     * @param sqcs  棋盘
      * @param destination 目标位置，如(0, 0), (0, 1)等等
      * @return this棋子对象的移动规则和当前位置(chessboardPoint)能否到达目标位置
      * <br>
      * 这个方法主要是检查移动的合法性，如果合法就返回true，反之是false。
      */
     //todo: Override this method for Cannon
-    public boolean canMoveTo(SquareComponent[][] chessboard, ChessboardPoint destination) {
-        SquareComponent destinationChess = chessboard[destination.getX()][destination.getY()];
+    public boolean canMoveTo(Chessboard chessboard,SquareComponent[][] sqcs, ChessboardPoint destination) {
+        SquareComponent destinationChess = sqcs[destination.getX()][destination.getY()];
         if(destination.getX()!=this.getChessboardPoint().getX() && destination.getY()!=this.getChessboardPoint().getY()) return false;
         if(destination.getX()==this.getChessboardPoint().getX()
                 && Math.min(destination.getY(),this.getChessboardPoint().getY())!=Math.max(destination.getY(),this.getChessboardPoint().getY())-1)
@@ -144,7 +145,7 @@ public abstract class SquareComponent extends JComponent {
         else if(destination.getY()==this.getChessboardPoint().getY()
                 && Math.min(destination.getX(),this.getChessboardPoint().getX())!=Math.max(destination.getX(),this.getChessboardPoint().getX())-1)
             return false;
-        return (destinationChess.isReversal && destinationChess.getChessColor() != Chessboard.getCurrentColor()
+        return (destinationChess.isReversal && destinationChess.getChessColor() != chessboard.getCurrentColor()
                 && ((this.hierarchy>=destinationChess.hierarchy) || (this.hierarchy==0 && destinationChess.hierarchy==5)) )
                 || destinationChess instanceof EmptySlotComponent;
     }
@@ -159,8 +160,8 @@ public abstract class SquareComponent extends JComponent {
     }
     public void addScoreToPlayer(SquareComponent squareComponent) {//todo
         if(squareComponent.chessColor.getColor().equals(Color.BLACK))
-            Chessboard.redPlayer.setCurrentScore(Chessboard.redPlayer.getCurrentScore()+squareComponent.score);
+            ChessGameFrame.chessboard.redPlayer.setCurrentScore(ChessGameFrame.chessboard.redPlayer.getCurrentScore()+squareComponent.score);
         else
-            Chessboard.blackPlayer.setCurrentScore(Chessboard.blackPlayer.getCurrentScore()+squareComponent.score);
+            ChessGameFrame.chessboard.blackPlayer.setCurrentScore(ChessGameFrame.chessboard.blackPlayer.getCurrentScore()+squareComponent.score);
     }
 }

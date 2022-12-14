@@ -26,8 +26,8 @@ public class ChessGameFrame extends JFrame {
         else if(state==JFrame.MAXIMIZED_BOTH)
             super.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
-    private final int WIDTH;
-    private final int HEIGHT;
+    public final int WIDTH;
+    public final int HEIGHT;
     public final int CHESSBOARD_SIZE;
 
     private GameController gameController;
@@ -35,7 +35,7 @@ public class ChessGameFrame extends JFrame {
     private static JLabel scoreOfBlack;
     private static JLabel scoreOfRed;
     public static Chessboard chessboard;
-    public static CapturingBoard capturingBoardMe, capturingBoardHe;//capturingBoardMe:我捕获的棋子(所以与我的颜色相反！)
+    //capturingBoardMe:我捕获的棋子(所以与我的颜色相反！)
     public static int menuMode;//0人机1玩家对战
     public static ComputerPlayer computerPlayer;
     public static JPanel gamePanel=new JPanel(),menuPanel=new JPanel();//todo
@@ -63,7 +63,9 @@ public class ChessGameFrame extends JFrame {
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null); // Center the window.
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //设置程序关闭按键，如果点击右上方的叉就游戏全部关闭了
-
+    }
+    public void initChessGameFrame()
+    {
         loadMenuPanel();
         loadGamePanel();
         setContentPane(menuPanel);
@@ -87,15 +89,15 @@ public class ChessGameFrame extends JFrame {
         gamePanel.add(statusLabel);
      */
     }
-    public static void contendFirstInPVC()
+    public static void contendFirstInPVC(int mode)////0重开1载入
     {
         String[] options={"是","否"};
-        int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),"你想要先手吗？","裁判问："
+        int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame(),mode==0?"你想要先手吗？":"你想要红方吗？","裁判问："
                 ,JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[0]);
         if(choice==0)
-            Chessboard.mePlayer=Chessboard.redPlayer;
+            chessboard.mePlayer=chessboard.redPlayer;
         else
-            Chessboard.mePlayer=Chessboard.blackPlayer;
+            chessboard.mePlayer=chessboard.blackPlayer;
     }
     private void addPVCButton() {
         JButton button = new JButton("人机对战");
@@ -107,7 +109,7 @@ public class ChessGameFrame extends JFrame {
 
         button.addActionListener(e -> {
             menuMode =0;
-            chessboard.initAllChessOnBoard();
+            chessboard.initAllChessOnBoard(0);
             addCapturingBoard();
             ChessGameFrame.repaintAll();
 
@@ -119,8 +121,6 @@ public class ChessGameFrame extends JFrame {
             gamePanel.setVisible(true);
             gamePanel.add(PVCButtonsPanel);
             setContentPane(gamePanel);
-            computerPlayer=new ComputerPlayer();
-            computerPlayer.start();
         });
     }
     public static void contendFirstInPVP()
@@ -166,6 +166,7 @@ public class ChessGameFrame extends JFrame {
     }
     private void loadGamePanel()
     {
+        addChessboard();
         gamePanel.setBackground(Color.WHITE);
         gamePanel.setLayout(null);
         gamePanel.setVisible(true);
@@ -173,7 +174,6 @@ public class ChessGameFrame extends JFrame {
 
         addGameEscapeButton();
         addGameMinimize();
-        addChessboard();
         loadPVCButtons();
     }
     /**
@@ -181,22 +181,22 @@ public class ChessGameFrame extends JFrame {
      */
     private void addChessboard() {
         chessboard = new Chessboard(CHESSBOARD_SIZE/2,CHESSBOARD_SIZE);
-        gameController = new GameController(chessboard);
+        gameController = new GameController();
         chessboard.setLocation(WIDTH / 5, HEIGHT / 5);
         gamePanel.add(chessboard);
     }
     private void addCapturingBoard()
     {//player:0红1黑
-        capturingBoardHe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
-                mePlayer.getColor().equals(Color.RED)?0:1);
-        capturingBoardMe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
-                mePlayer.getColor().equals(Color.RED)?1:0);
+        chessboard.capturingBoardHe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
+                chessboard.mePlayer.getColor().equals(Color.RED)?0:1);
+        chessboard.capturingBoardMe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
+                chessboard.mePlayer.getColor().equals(Color.RED)?1:0);
 
-        capturingBoardHe.setLocation(WIDTH/5 - CHESSBOARD_SIZE/8, HEIGHT / 4);
-        capturingBoardMe.setLocation(WIDTH/5 + CHESSBOARD_SIZE/2, HEIGHT / 4);//自己放在右边
+        chessboard.capturingBoardHe.setLocation(WIDTH/5 - CHESSBOARD_SIZE/8, HEIGHT / 4);
+        chessboard.capturingBoardMe.setLocation(WIDTH/5 + CHESSBOARD_SIZE/2, HEIGHT / 4);//自己放在右边
 
-        gamePanel.add(capturingBoardHe);
-        gamePanel.add(capturingBoardMe);
+        gamePanel.add(chessboard.capturingBoardHe);
+        gamePanel.add(chessboard.capturingBoardMe);
     }
     /**
      * 在游戏窗体中添加标签
@@ -208,13 +208,13 @@ public class ChessGameFrame extends JFrame {
         statusLabel.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(statusLabel);
 
-        scoreOfBlack = new JLabel(String.format("黑方的分数是： %d", Chessboard.blackPlayer.getCurrentScore()));
+        scoreOfBlack = new JLabel(String.format("黑方的分数是： %d", chessboard.blackPlayer.getCurrentScore()));
         scoreOfBlack.setLocation(WIDTH / 5, HEIGHT *3/ 40);
         scoreOfBlack.setSize(WIDTH/6, HEIGHT /12);
         scoreOfBlack.setFont(new Font("宋体", Font.BOLD, 20));
         gamePanel.add(scoreOfBlack);
 
-        scoreOfRed = new JLabel(String.format("红方的分数是： %d", Chessboard.redPlayer.getCurrentScore()));
+        scoreOfRed = new JLabel(String.format("红方的分数是： %d", chessboard.redPlayer.getCurrentScore()));
         scoreOfRed.setLocation(WIDTH / 5, HEIGHT *5/ 40);
         scoreOfRed.setSize(WIDTH/6, HEIGHT /12);
         scoreOfRed.setFont(new Font("宋体", Font.BOLD, 20));
@@ -232,25 +232,36 @@ public class ChessGameFrame extends JFrame {
         PVCButtonsPanel.setSize(WIDTH/5,HEIGHT/2);
         PVCButtonsPanel.setLocation(WIDTH * 4 / 5, HEIGHT *2/ 20);
 
-        loadGameLoadButton();
+        loadInButton();
+        loadOutButton();
         loadCheatingModeButton();
         loadRestartButton();
         loadWithdrawButton();
         loadComputerPlayerButton();
         loadSetDifficultyButton();
     }
-    private void loadGameLoadButton() {
+    private void loadInButton() {
         JButton button = new JButton("载入");
         button.setLocation(0, 0);
-        button.setSize(WIDTH*11/60, HEIGHT/12);
+        button.setSize(WIDTH /12, HEIGHT/12);
         button.setFont(new Font("宋体", Font.BOLD, 20));
         button.setBackground(Color.LIGHT_GRAY);
         PVCButtonsPanel.add(button);
 
         button.addActionListener(e -> {
-            System.out.println("Click load");
-            String path = JOptionPane.showInputDialog(this, "输入路径：");
-            gameController.loadGameFromFile(path);
+            gameController.loadGameFromFile();
+        });
+    }
+    private void loadOutButton() {
+        JButton button = new JButton("存档");
+        button.setLocation(WIDTH/10, 0);
+        button.setSize(WIDTH/12, HEIGHT/12);
+        button.setFont(new Font("宋体", Font.BOLD, 20));
+        button.setBackground(Color.LIGHT_GRAY);
+        PVCButtonsPanel.add(button);
+
+        button.addActionListener(e -> {
+            gameController.saveGameToFile();
         });
     }
 
@@ -282,7 +293,7 @@ public class ChessGameFrame extends JFrame {
                     ,"裁判问：",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
             if(choice==0){
                 ComputerPlayer.stop=true;
-                chessboard.initAllChessOnBoard();//restart!
+                chessboard.initAllChessOnBoard(0);//restart!
                 ChessGameFrame.repaintAll();
                 computerPlayer=new ComputerPlayer();
                 computerPlayer.start();
@@ -297,91 +308,91 @@ public class ChessGameFrame extends JFrame {
     public static JButton withdrawButton = new JButton("作弊模式：关");
     private void withdraw()
     {
-        SquareComponent firChess = chessboard.getChessComponents()[firX.peek()][firY.peek()];
-        if(ope.peek()==1)//翻棋子的
+        SquareComponent firChess = chessboard.getChessComponents()[chessboard.firX.peek()][chessboard.firY.peek()];
+        if(chessboard.ope.peek()==1)//翻棋子的
             firChess.setReversal(false);
-        else if(ope.peek()==2)//走棋子的 0-6:将士相车马兵炮7:空
+        else if(chessboard.ope.peek()==2)//走棋子的 0-6:将士相车马兵炮7:空
         {
-            SquareComponent secChess = chessboard.getChessComponents()[secX.peek()][secY.peek()];
-            if(firCom.peek()==0)
-            firChess = new GeneralChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(firCom.peek()==1)
-            firChess = new AdvisorChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(firCom.peek()==2)
-            firChess = new MinisterChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(firCom.peek()==3)
-            firChess = new ChariotChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(firCom.peek()==4)
-            firChess = new HorseChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(firCom.peek()==5)
-            firChess = new SoldierChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(firCom.peek()==6)
-            firChess = new CannonChessComponent(new ChessboardPoint(firX.peek(),firY.peek()), chessboard.calculatePoint(firX.peek(),firY.peek())
-                    , firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            SquareComponent secChess = chessboard.getChessComponents()[chessboard.secX.peek()][chessboard.secY.peek()];
+            if(chessboard.firCom.peek()==0)
+            firChess = new GeneralChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.firCom.peek()==1)
+            firChess = new AdvisorChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.firCom.peek()==2)
+            firChess = new MinisterChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.firCom.peek()==3)
+            firChess = new ChariotChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.firCom.peek()==4)
+            firChess = new HorseChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.firCom.peek()==5)
+            firChess = new SoldierChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.firCom.peek()==6)
+            firChess = new CannonChessComponent(new ChessboardPoint(chessboard.firX.peek(),chessboard.firY.peek()), chessboard.calculatePoint(chessboard.firX.peek(),chessboard.firY.peek())
+                    , chessboard.firCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
             //else if(firCom.peek()==7) first 必无空棋子
             //firChess = new EmptySlotComponent(firChess.getChessboardPoint(), firChess.getLocation(), chessboard.clickController, chessboard.CHESS_SIZE);
 
-            if(secCom.peek()==0)
-                secChess = new GeneralChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==1)
-                secChess = new AdvisorChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==2)
-                secChess = new MinisterChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==3)
-                secChess = new ChariotChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==4)
-                secChess = new HorseChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==5)
-                secChess = new SoldierChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==6)
-                secChess = new CannonChessComponent(new ChessboardPoint(secX.peek(),secY.peek()), chessboard.calculatePoint(secX.peek(),secY.peek())
-                        , secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
-            else if(secCom.peek()==7)
+            if(chessboard.secCom.peek()==0)
+                secChess = new GeneralChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==1)
+                secChess = new AdvisorChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==2)
+                secChess = new MinisterChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==3)
+                secChess = new ChariotChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==4)
+                secChess = new HorseChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==5)
+                secChess = new SoldierChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==6)
+                secChess = new CannonChessComponent(new ChessboardPoint(chessboard.secX.peek(),chessboard.secY.peek()), chessboard.calculatePoint(chessboard.secX.peek(),chessboard.secY.peek())
+                        , chessboard.secCol.peek()==0?ChessColor.RED:ChessColor.BLACK , chessboard.clickController, chessboard.CHESS_SIZE);
+            else if(chessboard.secCom.peek()==7)
                 secChess = new EmptySlotComponent(secChess.getChessboardPoint(), secChess.getLocation(), chessboard.clickController, chessboard.CHESS_SIZE);
 
             chessboard.putChessOnBoard(firChess);
             chessboard.putChessOnBoard(secChess);
 
             firChess.setReversal(true);
-            if(firCannonSecRev.peek()==1)
+            if(chessboard.firCannonSecRev.peek()==1)
                 secChess.setReversal(false);
             else
                 secChess.setReversal(true);
 
-            if(secCol.peek()==0)
-                Chessboard.blackPlayer.setCurrentScore(Chessboard.blackPlayer.getCurrentScore()-secChess.score);
+            if(chessboard.secCol.peek()==0)
+                chessboard.blackPlayer.setCurrentScore(chessboard.blackPlayer.getCurrentScore()-secChess.score);
             else
-                Chessboard.redPlayer.setCurrentScore(Chessboard.redPlayer.getCurrentScore()-secChess.score);
-            ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", Chessboard.blackPlayer.getCurrentScore()));
-            ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", Chessboard.redPlayer.getCurrentScore()));
+                chessboard.redPlayer.setCurrentScore(chessboard.redPlayer.getCurrentScore()-secChess.score);
+            ChessGameFrame.getScoreOfBlack().setText(String.format("BLACK's points: %d", chessboard.blackPlayer.getCurrentScore()));
+            ChessGameFrame.getScoreOfRed().setText(String.format("RED's points: %d", chessboard.redPlayer.getCurrentScore()));
 
-            if(capturingLabel.peek()!=7)
+            if(chessboard.capturingLabel.peek()!=7)
             {
-                boolean meIsEaten=(capturingIsMe.peek()==1);
-                CapturingBoard change=meIsEaten?capturingBoardHe:capturingBoardMe;
-                change.capturingChesses[capturingLabel.peek()].num--;
+                boolean meIsEaten=(chessboard.capturingIsMe.peek()==1);
+                CapturingBoard change=meIsEaten?chessboard.capturingBoardHe:chessboard.capturingBoardMe;
+                change.capturingChesses[chessboard.capturingLabel.peek()].num--;
             }
         }
-        Chessboard.setCurrentColor(Chessboard.getCurrentColor().equals(ChessColor.RED)?ChessColor.BLACK:ChessColor.RED);
-        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", Chessboard.getCurrentColor().getName()));
-        ope.pop();
-        firCom.pop();   firCol.pop();   firX.pop(); firY.pop();
-        secCom.pop();   secCol.pop();   secX.pop(); secY.pop(); firCannonSecRev.pop();
-        capturingIsMe.pop();    capturingLabel.pop();
+        chessboard.setCurrentColor(chessboard.getCurrentColor().equals(ChessColor.RED)?ChessColor.BLACK:ChessColor.RED);
+        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", chessboard.getCurrentColor().getName()));
+        chessboard.ope.pop();
+        chessboard.firCom.pop();   chessboard.firCol.pop();   chessboard.firX.pop(); chessboard.firY.pop();
+        chessboard.secCom.pop();   chessboard.secCol.pop();   chessboard.secX.pop(); chessboard.secY.pop(); chessboard.firCannonSecRev.pop();
+        chessboard.capturingIsMe.pop();    chessboard.capturingLabel.pop();
         repaintAll();
-        if(ope.empty())
+        if(chessboard.ope.empty())
             withdrawButton.setEnabled(false);
     }
     private void loadWithdrawButton() {
@@ -397,7 +408,7 @@ public class ChessGameFrame extends JFrame {
     }
     private void loadComputerPlayerButton()//是否开启
     {
-        JButton button = new JButton("开");
+        JButton button = new JButton("关");
         button.addActionListener((e) -> {
             if(button.getText().equals("开")) {
                 button.setText("关");
@@ -471,14 +482,17 @@ public class ChessGameFrame extends JFrame {
     }
     public static void repaintAll()
     {
-        capturingBoardHe.repaint();
-        capturingBoardMe.repaint();
+        chessboard.capturingBoardHe.repaint();
+        chessboard.capturingBoardMe.repaint();
         withdrawButton.repaint();
         chessboard.repaint();
         statusLabel.repaint();
         scoreOfBlack.repaint();
         scoreOfRed.repaint();
         cheatingButton.repaint();
+        getStatusLabel().setText(String.format("轮到%s方了", chessboard.getCurrentColor().getName()));
+        getScoreOfBlack().setText(String.format("黑方的得分是： %d", chessboard.blackPlayer.getCurrentScore()));
+        getScoreOfRed().setText(String.format("红方的得分是 %d", chessboard.redPlayer.getCurrentScore()));
     }
     @Override
     protected void processWindowEvent(WindowEvent e)

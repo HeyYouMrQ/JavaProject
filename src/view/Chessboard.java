@@ -11,10 +11,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Stack;
 
+import static controller.GameController.*;
 import static view.ChessGameFrame.*;
+import static view.Handler.mainFrame;
 
 /**
  * 这个类表示棋盘组建，其包含：
@@ -26,19 +27,22 @@ public class Chessboard extends JComponent {
     private static final int COL_SIZE = 4;
 
     private final SquareComponent[][] squareComponents = new SquareComponent[ROW_SIZE][COL_SIZE];
-    public final ClickController clickController = new ClickController(this);
-    public final int CHESS_SIZE;
+    public ClickController clickController = new ClickController(this);
+    public int CHESS_SIZE;
     //todo: you can change the initial player
     //all chessComponents in this chessboard are shared only one model controller
-
-    private static ChessColor currentColor;
-    public static Players redPlayer=new Players(Color.RED),blackPlayer=new Players(Color.BLACK);//红方先手
-    public static Stack<Integer> ope=new Stack<>(),firCom=new Stack<>(),firCol=new Stack<>(),firX=new Stack<>(),firY=new Stack<>()
+    public initType[][] initComponents =new initType[ROW_SIZE][COL_SIZE];
+    private ChessColor currentColor=ChessColor.RED;
+    public Players redPlayer=new Players(Color.RED),blackPlayer=new Players(Color.BLACK);//红方先手
+    public Stack<Integer> ope=new Stack<>(),firCom=new Stack<>(),firCol=new Stack<>(),firX=new Stack<>(),firY=new Stack<>()
             ,secCom=new Stack<>(),secCol=new Stack<>(),secX=new Stack<>(),secY=new Stack<>(),firCannonSecRev=new Stack<>();//ope=1,翻棋子,仅用fir;=2,走棋子,fir与sec都用;
     // firCannonSecRev若first为炮吃了未翻开的棋子，则为1
-    public static Stack<Integer> capturingIsMe=new Stack<>(),capturingLabel=new Stack<>();
+    public Stack<Integer> capturingIsMe=new Stack<>(),capturingLabel=new Stack<>();
     public static boolean isCheatingMode=false;
-    public static Players mePlayer;
+    public Players mePlayer=new Players();
+    public CapturingBoard capturingBoardMe=new CapturingBoard(mainFrame.CHESSBOARD_SIZE/8,mainFrame.CHESSBOARD_SIZE*7/8, mePlayer.getColor().equals(Color.RED)?1:0)
+            , capturingBoardHe= new CapturingBoard(mainFrame.CHESSBOARD_SIZE/8,mainFrame.CHESSBOARD_SIZE*7/8,
+            mePlayer.getColor().equals(Color.RED)?0:1);
     public static boolean canListenToMe=true;
     public Chessboard(int width, int height) {
         setLayout(null); // Use absolute layout.
@@ -46,17 +50,20 @@ public class Chessboard extends JComponent {
         CHESS_SIZE = (height - 6) / 8;
         SquareComponent.setSpacingLength(CHESS_SIZE / 12);
         System.out.printf("chessboard [%d * %d], chess size = %d\n", width, height, CHESS_SIZE);
+        for(int i=0;i<ROW_SIZE;i++)//分配内存
+            for(int j=0;j<COL_SIZE;j++)
+                initComponents[i][j]=new initType();
     }
 
     public SquareComponent[][] getChessComponents() {
         return squareComponents;
     }
 
-    public static ChessColor getCurrentColor() {
+    public ChessColor getCurrentColor() {
         return currentColor;
     }
 
-    public  static void setCurrentColor(ChessColor cC) {
+    public void setCurrentColor(ChessColor cC) {
         currentColor = cC;
     }
 
@@ -94,7 +101,7 @@ public class Chessboard extends JComponent {
         chess2.repaint();
     }
 
-    private class initType
+    public static class initType
     {
         public int chessType,player;//前者0-6:将士相车马兵炮;后者0-1:红黑
         public initType(int chessType,int player)
@@ -102,6 +109,7 @@ public class Chessboard extends JComponent {
             this.chessType=chessType;
             this.player=player;
         }
+        public initType() {}
     }
     private initType[][] initRandomizedChessOnBoard()
     {
@@ -124,51 +132,65 @@ public class Chessboard extends JComponent {
                 ret[i][j]=tmpList.get(i*COL_SIZE+j);
         return ret;
     }
-    public void initAllChessOnBoard() {
-        ope.clear();
-        firCom.clear();   firCol.clear();   firX.clear(); firY.clear();
-        secCom.clear();   secCol.clear();   secX.clear(); secY.clear();
-        firCannonSecRev.clear();
-        capturingIsMe.clear();    capturingLabel.clear();
-        withdrawButton.setEnabled(false);
-        currentColor = ChessColor.RED;
-        redPlayer.setCurrentScore(0);
-        blackPlayer.setCurrentScore(0);
-        cheatingButton.setText("作弊模式：关");
-        isCheatingMode=false;
-        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", Chessboard.getCurrentColor().getName()));
-        ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的得分是： %d", Chessboard.blackPlayer.getCurrentScore()));
-        ChessGameFrame.getScoreOfRed().setText(String.format("红方的得分是 %d", Chessboard.redPlayer.getCurrentScore()));
-        if(menuMode ==0)
-            ChessGameFrame.contendFirstInPVC();
-        else if(menuMode ==1)
-            ChessGameFrame.contendFirstInPVP();
+    public void initAllChessOnBoard(int mode) {//0重开1按指定的initComponents初始化但不载入
+        if(mode==0)
+        {
+            ope.clear();
+            firCom.clear();   firCol.clear();   firX.clear(); firY.clear();
+            secCom.clear();   secCol.clear();   secX.clear(); secY.clear();
+            firCannonSecRev.clear();
+            capturingIsMe.clear();    capturingLabel.clear();
+            withdrawButton.setEnabled(false);
+            cheatingButton.setText("作弊模式：关");
+            isCheatingMode=false;
+            currentColor = ChessColor.RED;
+            redPlayer.setCurrentScore(0);
+            blackPlayer.setCurrentScore(0);
+            if(menuMode ==0)
+                ChessGameFrame.contendFirstInPVC(0);
+            else if(menuMode ==1)
+                ChessGameFrame.contendFirstInPVP();
+            initComponents =initRandomizedChessOnBoard();
+        }
         if(capturingBoardHe!=null)
             capturingBoardHe.initAllCapturingChessOnBoard(mePlayer.getColor().equals(Color.RED) ?0:1);
         if(capturingBoardMe!=null)
             capturingBoardMe.initAllCapturingChessOnBoard(mePlayer.getColor().equals(Color.RED)?1:0);
-
-        initType[][] randomizedComponents=initRandomizedChessOnBoard();
-        for (int i = 0; i < squareComponents.length; i++) {
-            for (int j = 0; j < squareComponents[i].length; j++) {
-                ChessColor color=randomizedComponents[i][j].player==0? ChessColor.RED : ChessColor.BLACK;//0红1黑
+        if(mode==1)
+        {
+            for(int i=0;i<=6;i++)
+            {
+                capturingBoardMe.getCapturingChesses()[i].num= aimCapturingboardMeNum[i];
+                capturingBoardHe.getCapturingChesses()[i].num= aimCapturingboardHeNum[i];
+            }
+        }
+        for (int i = 0; i < squareComponents.length; i++)
+        {
+            for (int j = 0; j < squareComponents[i].length; j++)
+            {
+                ChessColor color= initComponents[i][j].player==0? ChessColor.RED : ChessColor.BLACK;//0红1黑
                 SquareComponent squareComponent;
-                if (randomizedComponents[i][j].chessType == 0)//0-6:将士相车马兵炮
+                if (initComponents[i][j].chessType == 0)//0-6:将士相车马兵炮
                     squareComponent = new GeneralChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                else if(randomizedComponents[i][j].chessType == 1)
+                else if(initComponents[i][j].chessType == 1)
                     squareComponent = new AdvisorChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                else if(randomizedComponents[i][j].chessType == 2)
+                else if(initComponents[i][j].chessType == 2)
                     squareComponent = new MinisterChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                else if(randomizedComponents[i][j].chessType == 3)
+                else if(initComponents[i][j].chessType == 3)
                     squareComponent = new ChariotChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                else if(randomizedComponents[i][j].chessType == 4)
+                else if(initComponents[i][j].chessType == 4)
                     squareComponent = new HorseChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                else if(randomizedComponents[i][j].chessType == 5)
+                else if(initComponents[i][j].chessType == 5)
                     squareComponent = new SoldierChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
-                else //==6
+                else if(initComponents[i][j].chessType == 6)
                     squareComponent = new CannonChessComponent(new ChessboardPoint(i, j), calculatePoint(i, j), color, clickController, CHESS_SIZE);
+                else// if(arrangedComponents[i][j].chessType == 7)
+                    squareComponent = new EmptySlotComponent(new ChessboardPoint(i, j), calculatePoint(i, j), clickController, CHESS_SIZE);
+
                 squareComponent.setVisible(true);
                 putChessOnBoard(squareComponent);
+                if(mode==1)
+                    squareComponent.setReversal(isRever[i][j]);
             }
         }
     }
@@ -195,7 +217,4 @@ public class Chessboard extends JComponent {
      * 通过GameController调用该方法
      * @param chessData
      */
-    public void loadGame(List<String> chessData) {//todo
-        chessData.forEach(System.out::println);
-    }
 }
