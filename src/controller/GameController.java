@@ -2,11 +2,11 @@ package controller;
 
 import chessComponent.*;
 import media.FileChooser;
+import media.MyDialog;
 import model.ChessColor;
 import view.ChessGameFrame;
 import view.Chessboard;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -255,7 +255,8 @@ public class GameController {
             Path path=Path.of(FileChooser.chooseFile(0));
             if(!extensionOK(path.toString()))
             {
-                JOptionPane.showMessageDialog(chessboard, "error 101");
+                //JOptionPane.showMessageDialog(chessboard, "error 101");
+                MyDialog.showDialog("文件小精灵","error 101");
                 return;
             }
             chessData=Files.readAllLines(path);
@@ -267,16 +268,16 @@ public class GameController {
         int errorState = checkError(chessData);
         switch (errorState) {
             case 2:
-                JOptionPane.showMessageDialog(chessboard, "error 102");
+                MyDialog.showDialog("文件小精灵","error 102");
                 return;
             case 3:
-                JOptionPane.showMessageDialog(chessboard, "error 103");
+                MyDialog.showDialog("文件小精灵","error 103");
                 return;
             case 4:
-                JOptionPane.showMessageDialog(chessboard, "error 104");
+                MyDialog.showDialog("文件小精灵","error 104");
                 return;
             case 5:
-                JOptionPane.showMessageDialog(chessboard, "error 105");
+                MyDialog.showDialog("文件小精灵","error 105");
                 return;
             //default:
         }

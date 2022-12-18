@@ -49,7 +49,7 @@ public class Chessboard extends JComponent {
         setSize(width + 2, height);
         CHESS_SIZE = (height - 6) / 8;
         SquareComponent.setSpacingLength(CHESS_SIZE / 12);
-        System.out.printf("chessboard [%d * %d], chess size = %d\n", width, height, CHESS_SIZE);
+        //System.out.printf("chessboard [%d * %d], chess size = %d\n", width, height, CHESS_SIZE);
         for(int i=0;i<ROW_SIZE;i++)//分配内存
             for(int j=0;j<COL_SIZE;j++)
                 initComponents[i][j]=new initType();
@@ -125,7 +125,7 @@ public class Chessboard extends JComponent {
             for(int j=0;j<5;j++)    tmpList.add(new initType(5,i));
             for(int j=0;j<2;j++)    tmpList.add(new initType(6,i));
         }
-        System.out.println(tmpList.size());
+        //System.out.println(tmpList.size());
         Collections.shuffle(tmpList);
         for(int i=0;i<ROW_SIZE;i++)
             for(int j=0;j<COL_SIZE;j++)

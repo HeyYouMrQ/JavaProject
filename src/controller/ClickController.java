@@ -3,6 +3,7 @@ package controller;
 import chessComponent.EmptySlotComponent;
 import chessComponent.SquareComponent;
 import computerPlayer.ComputerPlayer;
+import media.MyDialog;
 import model.ChessColor;
 import player.Players;
 import view.CapturingBoard;
@@ -10,7 +11,6 @@ import view.ChessGameFrame;
 import view.Chessboard;
 import view.Handler;
 
-import javax.swing.*;
 import java.awt.*;
 
 import static view.ChessGameFrame.*;
@@ -63,7 +63,7 @@ public class ClickController {
             {//翻开
                 recordWithdraw(squareComponent);
                 squareComponent.setReversal(true);
-                System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
+                //System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
                 squareComponent.repaint();
                 chessboard.clickController.swapPlayer();
                 return 2;
@@ -113,7 +113,7 @@ public class ClickController {
                 first.repaint();
                 first = null;
                 squareComponent.setReversal(true);
-                System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
+                //System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
                 squareComponent.repaint();
                 chessboard.clickController.swapPlayer();
                 return 2;
@@ -140,11 +140,8 @@ public class ClickController {
     private void hasWinner(Players pl)
     {
         ComputerPlayer.stop=true;
-        String[] options={"菜单","重开"};
-        int choice=JOptionPane.showOptionDialog(JOptionPane.getRootFrame()
-                ,(pl.getColor().equals(Color.BLACK)? "黑方":"红方")+" 赢了！"
-                ,"游戏结束！",JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[1]);
-        if(choice==0){//菜单
+        int choice= MyDialog.confirmDialog("游戏结束！",(pl.getColor().equals(Color.BLACK)? "黑方":"红方")+" 赢了！","菜单","重开");
+        if(choice==1){//菜单
             gamePanel.setEnabled(false);
             gamePanel.setVisible(false);
             PVCButtonsPanel.setEnabled(false);

@@ -26,6 +26,8 @@ public class CapturingChess extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {//0-6:将士相车马兵炮
+        g.setColor(Color.LIGHT_GRAY);
+        boolean numIsZero=(num==0);
         String name="";
         if(chessColor.equals(ChessColor.RED))
         {
@@ -49,19 +51,30 @@ public class CapturingChess extends JComponent {
         }
         spacingLength=3;//todo
         super.paintComponent(g);
-        g.setColor(Color.CYAN);//圆形实心棋子
+        if(!numIsZero)
+            g.setColor(Color.CYAN);//圆形实心棋子
         g.fillOval(spacingLength, spacingLength, this.getWidth() - 2 * spacingLength, this.getHeight() - 2 * spacingLength);
-        g.setColor(Color.DARK_GRAY);//圆形空心边框
+        if(!numIsZero)
+            g.setColor(Color.DARK_GRAY);//圆形空心边框
         g.drawOval(spacingLength, spacingLength, this.getWidth() - 2 * spacingLength,this.getHeight() - 2 * spacingLength);
-        g.setColor(this.getChessColor().getColor());//字
+        if(!numIsZero)
+            g.setColor(this.getChessColor().getColor());//字
+        else
+            g.setColor(Color.GRAY);
         g.setFont(CHESS_FONT);
         g.drawString(name, this.getWidth() / 4, this.getHeight() * 2 / 3);
+        g.setColor(Color.LIGHT_GRAY);
 
-        g.setColor(Color.WHITE);//实心小圈
+        if(!numIsZero)
+            g.setColor(Color.WHITE);//实心小圈
         g.fillOval(this.getWidth()/12, this.getWidth()/12, this.getWidth()/4, this.getHeight()/4);
-        g.setColor(Color.DARK_GRAY);//空心小圆
+        if(!numIsZero)
+            g.setColor(Color.DARK_GRAY);//空心小圆
         g.drawOval(this.getWidth()/12, this.getWidth()/12, this.getWidth()/4, this.getHeight()/4);
-        g.setColor(Color.RED);//字
+        if(!numIsZero)
+            g.setColor(Color.RED);//字
+        else
+            g.setColor(Color.GRAY);
         g.setFont(NUM_FONT);
         g.drawString(String.format("%d",num), this.getWidth() / 7, this.getHeight()*7/24 );
     }
