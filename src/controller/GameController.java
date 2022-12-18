@@ -75,6 +75,7 @@ public class GameController {
                 if(fromChessboard.clickController.onClick(fromChessboard.getChessComponents()[secX.peek()][secY.peek()])!=3)
                     return false;
             }
+            else return false;
             ope.pop();
             firCom.pop();   firCol.pop();   firX.pop(); firY.pop();
             secCom.pop();   secCol.pop();   secX.pop(); secY.pop(); firCannonSecRev.pop();
