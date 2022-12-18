@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import static view.ChessGameFrame.chessboard;
-import static view.ChessGameFrame.withdrawButton;
+import static view.ChessGameFrame.*;
 import static view.Chessboard.canListenToMe;
 import static view.Handler.mainFrame;
 public class ComputerPlayer extends Thread
@@ -153,14 +152,15 @@ public class ComputerPlayer extends Thread
     }
     @Override
     public void run() {
-        stop=false;
+        if(computerStop)
+            return;
         withdrawButton.setEnabled(false);
         while (true)
         {
-            if (stop) break;
+            if (stop || computerStop) break;
             if(chessboard.getCurrentColor()!=(chessboard.mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
                 handlePlay();
-            try {sleep(200);} catch (InterruptedException ex) {}
+            try {sleep(20);} catch (InterruptedException ex) {}
         }
         if(!chessboard.ope.empty())
             withdrawButton.setEnabled(true);

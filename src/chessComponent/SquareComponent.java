@@ -3,7 +3,6 @@ package chessComponent;
 import controller.ClickController;
 import model.ChessColor;
 import model.ChessboardPoint;
-import view.ChessGameFrame;
 import view.Chessboard;
 
 import javax.swing.*;
@@ -158,10 +157,10 @@ public abstract class SquareComponent extends JComponent {
         g.setColor(squareColor);
         g.fillRect(1, 1, this.getWidth() - 2, this.getHeight() - 2);
     }
-    public void addScoreToPlayer(SquareComponent squareComponent) {//todo
+    public void addScoreToPlayer(Chessboard chessboard,SquareComponent squareComponent) {//todo
         if(squareComponent.chessColor.getColor().equals(Color.BLACK))
-            ChessGameFrame.chessboard.redPlayer.setCurrentScore(ChessGameFrame.chessboard.redPlayer.getCurrentScore()+squareComponent.score);
+            chessboard.redPlayer.setCurrentScore(chessboard.redPlayer.getCurrentScore()+squareComponent.score);
         else
-            ChessGameFrame.chessboard.blackPlayer.setCurrentScore(ChessGameFrame.chessboard.blackPlayer.getCurrentScore()+squareComponent.score);
+            chessboard.blackPlayer.setCurrentScore(chessboard.blackPlayer.getCurrentScore()+squareComponent.score);
     }
 }

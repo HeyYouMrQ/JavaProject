@@ -41,6 +41,7 @@ public class ChessGameFrame extends JFrame {
     //capturingBoardMe:我捕获的棋子(所以与我的颜色相反！)
     public static int menuMode;//0人机1玩家对战
     public static ComputerPlayer computerPlayer;
+    public static boolean computerStop=true;
     public static JLayeredPane gamePanel=new JLayeredPane(),menuPanel=new JLayeredPane();//新建一个分层器
     public static JLayeredPane PVCButtonsPanel=new JLayeredPane();
     @Override
@@ -205,7 +206,7 @@ public class ChessGameFrame extends JFrame {
     }
     private void addGameBackground()
     {
-        JComponent imageComponent = new ImageComponent(MENU);// create an instance of ImageComponent
+        JComponent imageComponent = new ImageComponent(GameBG);// create an instance of ImageComponent
         imageComponent.setSize(WIDTH,HEIGHT);
         imageComponent.setLocation(0, 0); // set absolute location
         gamePanel.add(imageComponent,JLayeredPane.FRAME_CONTENT_LAYER);
@@ -327,6 +328,7 @@ public class ChessGameFrame extends JFrame {
                 ComputerPlayer.stop=true;
                 chessboard.initAllChessOnBoard(0);//restart!
                 ChessGameFrame.repaintAll();
+                ComputerPlayer.stop=false;
                 computerPlayer=new ComputerPlayer();
                 computerPlayer.start();
             }
@@ -445,11 +447,13 @@ public class ChessGameFrame extends JFrame {
             if(button.getText().equals("开")) {
                 button.setText("关");
                 button.repaint();
+                computerStop=true;
                 ComputerPlayer.stop=true;
             }
             else {
                 button.setText("开");
                 button.repaint();
+                computerStop=false;
                 ComputerPlayer.stop=false;
                 computerPlayer=new ComputerPlayer();
                 computerPlayer.start();

@@ -98,7 +98,7 @@ public class ClickController {
                 }
                 else
                     recordWithdraw(first,squareComponent,squareComponent.isReversal()?0:1,0,squareComponent.label);
-                first.addScoreToPlayer(squareComponent);
+                first.addScoreToPlayer(chessboard,squareComponent);
                 //repaint in swap chess method.
                 chessboard.swapChessComponents(first, squareComponent);
                 chessboard.clickController.swapPlayer();
@@ -166,9 +166,12 @@ public class ClickController {
     }
     public void swapPlayer() {
         chessboard.setCurrentColor(chessboard.getCurrentColor() == ChessColor.BLACK ? ChessColor.RED : ChessColor.BLACK);
-        ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", chessboard.getCurrentColor().getName()));
-        ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的分数是： %d", chessboard.blackPlayer.getCurrentScore()));
-        ChessGameFrame.getScoreOfRed().setText(String.format("红方的分数是： %d", chessboard.redPlayer.getCurrentScore()));
+        if(this.chessboard==ChessGameFrame.chessboard)
+        {
+            ChessGameFrame.getStatusLabel().setText(String.format("轮到%s方了", chessboard.getCurrentColor().getName()));
+            ChessGameFrame.getScoreOfBlack().setText(String.format("黑方的分数是： %d", chessboard.blackPlayer.getCurrentScore()));
+            ChessGameFrame.getScoreOfRed().setText(String.format("红方的分数是： %d", chessboard.redPlayer.getCurrentScore()));
+        }
         ckeckWinner();
     }
 }

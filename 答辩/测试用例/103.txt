@@ -1,0 +1,21 @@
+E E E E
+E E E E
+E E E E
+E E E E
+E E E E
+E E E E
+E E E E
+H0 E h0 c0
+A1 v1 V0 E
+C0 A0 E s0
+S0 G1 m1 s1
+M0 S0 m0 S1
+s0 S0 C0 s1
+a0 c0 a0 M1
+BLACK
+RED
+0
+0
+0 0 0 0 0 0 0
+0 0 0 0 0 0 0
+
