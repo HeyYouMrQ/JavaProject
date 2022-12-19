@@ -22,7 +22,7 @@ public abstract class SquareComponent extends JComponent {
 
     private static final Color squareColor = new Color(250, 220, 190);
     protected static int spacingLength;
-    protected static final Font CHESS_FONT = new Font("宋体", Font.BOLD, 36);
+    protected static final Font CHESS_FONT = new Font("隶书", Font.BOLD, 36);
     /**
      * chessboardPoint: 表示8*4棋盘中，当前棋子在棋格对应的位置，如(0, 0), (1, 0)等等
      * chessColor: 表示这个棋子的颜色，有红色，黑色，无色三种

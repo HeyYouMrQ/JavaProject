@@ -13,6 +13,7 @@ import view.Handler;
 
 import java.awt.*;
 
+import static media.BufferedPictures.WithdrawOnIcon;
 import static view.ChessGameFrame.*;
 
 public class ClickController {
@@ -36,7 +37,10 @@ public class ClickController {
         chessboard.secCom.push(-1);   chessboard.secCol.push(-1);   chessboard.secX.push(-1); chessboard.secY.push(-1); chessboard.firCannonSecRev.push(-1);
         chessboard.capturingIsMe.push(-1);chessboard.capturingLabel.push(-1);
         if(ComputerPlayer.stop)
+        {
             withdrawButton.setEnabled(true);
+            withdrawButton.setIcon(WithdrawOnIcon);
+        }
     }
     public void recordWithdraw(SquareComponent fir,SquareComponent sec,int rev,int meIsEaten,int label)
     {
@@ -48,7 +52,10 @@ public class ClickController {
         chessboard.firCannonSecRev.push(rev);
         chessboard.capturingIsMe.push(meIsEaten);chessboard.capturingLabel.push(label);
         if(ComputerPlayer.stop)
+        {
             withdrawButton.setEnabled(true);
+            withdrawButton.setIcon(WithdrawOnIcon);
+        }
     }
     public boolean canChangeCursor(SquareComponent squareComponent)
     {
@@ -61,6 +68,9 @@ public class ClickController {
         {
             if(!squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
             {//翻开
+                if(menuMode==1)
+                    client.work(1,squareComponent.getChessboardPoint().getX(),
+                            squareComponent.getChessboardPoint().getY(),0,0);
                 recordWithdraw(squareComponent);
                 squareComponent.setReversal(true);
                 //System.out.printf("onClick to reverse a chess [%d,%d]\n", squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
@@ -87,6 +97,9 @@ public class ClickController {
             }
             else if (handleSecond(squareComponent))
             {//能吃的、能移动到空格子的就做
+                if(menuMode==1)
+                    client.work(2,first.getChessboardPoint().getX(), first.getChessboardPoint().getY()
+                            ,squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
                 if(squareComponent.label!=7)
                 {
                     ChessColor eatenColor=squareComponent.getChessColor();
@@ -108,6 +121,9 @@ public class ClickController {
             }
             else if(!isComputerOperating() && !squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
             {//翻过来(为了观感体验，机器不允许这样)
+                if(menuMode==1)
+                    client.work(1,squareComponent.getChessboardPoint().getX(),
+                            squareComponent.getChessboardPoint().getY(),0,0);
                 recordWithdraw(squareComponent);
                 first.setSelected(false);
                 first.repaint();

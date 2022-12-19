@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 public class CapturingChess extends JComponent {
     private static final Color squareColor = new Color(250, 220, 190);
-    protected static final Font CHESS_FONT = new Font("宋体", Font.BOLD, 36);
+    protected static final Font CHESS_FONT = new Font("隶书", Font.BOLD, 36);
     protected static final Font NUM_FONT = new Font("宋体", Font.BOLD, 20);
     private static int spacingLength;
     private ChessColor chessColor;

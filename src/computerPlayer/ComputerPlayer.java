@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import static media.BufferedPictures.WithdrawOffIcon;
+import static media.BufferedPictures.WithdrawOnIcon;
 import static view.ChessGameFrame.*;
 import static view.Chessboard.canListenToMe;
 import static view.Handler.mainFrame;
@@ -155,6 +157,7 @@ public class ComputerPlayer extends Thread
         if(computerStop)
             return;
         withdrawButton.setEnabled(false);
+        withdrawButton.setIcon(WithdrawOffIcon);
         while (true)
         {
             if (stop || computerStop) break;
@@ -163,6 +166,9 @@ public class ComputerPlayer extends Thread
             try {sleep(20);} catch (InterruptedException ex) {}
         }
         if(!chessboard.ope.empty())
+        {
             withdrawButton.setEnabled(true);
+            withdrawButton.setIcon(WithdrawOnIcon);
+        }
     }
 }

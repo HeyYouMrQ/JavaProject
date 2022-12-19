@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 import static controller.GameController.*;
+import static media.BufferedPictures.*;
 import static view.ChessGameFrame.*;
 import static view.Handler.mainFrame;
 
@@ -141,7 +142,8 @@ public class Chessboard extends JComponent {
             firCannonSecRev.clear();
             capturingIsMe.clear();    capturingLabel.clear();
             withdrawButton.setEnabled(false);
-            cheatingButton.setText("作弊模式：关");
+            withdrawButton.setIcon(WithdrawOffIcon);
+            cheatingButton.setIcon(CheatOffIcon);
             isCheatingMode=false;
             currentColor = ChessColor.RED;
             redPlayer.setCurrentScore(0);
