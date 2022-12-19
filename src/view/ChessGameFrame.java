@@ -216,10 +216,6 @@ public class ChessGameFrame extends JFrame {
             if((user=MyDialog.userDialog())==null)
                 return;
             menuMode =1;
-            menuPanel.setEnabled(false);
-            menuPanel.setVisible(false);
-            pvpPlayerListPanel.setVisible(true);
-            setContentPane(pvpPlayerListPanel);
             client.send(5,user);
             loadPVPPlayerListPanel();
             initPVP();//todo 偷懒惹
@@ -263,6 +259,8 @@ public class ChessGameFrame extends JFrame {
     }
     private void loadPVPPlayerListPanel()
     {
+        menuPanel.setVisible(false);
+        menuPanel.setEnabled(false);
         pvpPlayerListPanel.setSize(WIDTH,HEIGHT);
         pvpPlayerListPanel.setLocation(0,0);
         pvpPlayerListPanel.setLayout(null);
@@ -286,6 +284,7 @@ public class ChessGameFrame extends JFrame {
         scrollPane_1.setSize(WIDTH/2,HEIGHT/2);
         scrollPane_1.setLocation(WIDTH/10,HEIGHT/10);
         pvpPlayerListPanel.add(scrollPane_1,JLayeredPane.MODAL_LAYER);
+        setContentPane(pvpPlayerListPanel);
     }
     private void loadGamePanel()
     {

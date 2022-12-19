@@ -154,6 +154,8 @@ public class Chessboard extends JComponent {
                 ChessGameFrame.contendFirstInPVP();
             initComponents =initRandomizedChessOnBoard();
         }
+        if(menuMode ==1)
+            ChessGameFrame.contendFirstInPVP();
         if(capturingBoardHe!=null)
             capturingBoardHe.initAllCapturingChessOnBoard(mePlayer.getColor().equals(Color.RED) ?0:1);
         if(capturingBoardMe!=null)
