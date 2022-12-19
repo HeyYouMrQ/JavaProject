@@ -55,9 +55,9 @@ public class Client extends JFrame
     }
     private void handleStep(String step)
     {
-        int ope1=Integer.parseInt(step.substring(0)),firX1=Integer.parseInt(step.substring(1)),
-                firY1=Integer.parseInt(step.substring(2)),secX1=Integer.parseInt(step.substring(3)),
-                secY1=Integer.parseInt(step.substring(4));
+        int ope1=Integer.parseInt(step.substring(0,1)),firX1=Integer.parseInt(step.substring(1,2)),
+                firY1=Integer.parseInt(step.substring(2,3)),secX1=Integer.parseInt(step.substring(3,4)),
+                secY1=Integer.parseInt(step.substring(4,5));
         if(ope1==1)
             chessboard.clickController.onClick(chessboard.getChessComponents()[firX1][firY1]);
         else if(ope1==2)
