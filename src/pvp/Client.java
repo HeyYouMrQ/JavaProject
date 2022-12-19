@@ -88,7 +88,6 @@ public class Client extends JFrame
                         handleStep(info.substring(4));
                     else if(info.startsWith("lnk:"))
                     {
-                        System.out.println("TESTED\n");
                         oppoUser=info.substring(4);
                         pvpPlayerListPanel.setVisible(false);
                         mainFrame.setContentPane(gamePanel);
@@ -129,7 +128,7 @@ public class Client extends JFrame
         else if(mode==5)
             msg="usr:"+user;
         else if(mode==6)
-            msg="lnk:From:"+user+"To:"+receiveUserName;
+            msg="lnk:From:"+user+"To:"+receiveUserName+":";
 
         out.println(msg);// 发送信息
         out.flush();// 刷新输出缓冲区
