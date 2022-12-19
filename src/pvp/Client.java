@@ -98,7 +98,7 @@ public class Client extends JFrame
                             if (info.substring(4).equals((String) model.getElementAt(i)))
                                 itemFlag = true;
                         if (!itemFlag)
-                            model.addElement(info);// 添加列表项
+                            model.addElement(info.substring(4));// 添加列表项
                     }
                    /* else if (info.startsWith("reg:"))
                     {
