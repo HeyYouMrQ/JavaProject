@@ -88,6 +88,7 @@ public class Client extends JFrame
                         handleStep(info.substring(4));
                     else if(info.startsWith("lnk:"))
                     {
+                        System.out.println("TESTED\n");
                         oppoUser=info.substring(4);
                         pvpPlayerListPanel.setVisible(false);
                         mainFrame.setContentPane(gamePanel);
