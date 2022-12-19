@@ -155,6 +155,16 @@ public class ClickController {
     }
     private void hasWinner(Players pl)
     {
+        if(menuMode==1)
+        {
+            MyDialog.showDialog("游戏结束！",(pl.getColor().equals(Color.BLACK)? "黑方":"红方")+" 赢了！");
+            gamePanel.setEnabled(false);
+            gamePanel.setVisible(false);
+            menuPanel.setEnabled(true);
+            menuPanel.setVisible(true);
+            Handler.mainFrame.setContentPane(menuPanel);
+            return;
+        }
         ComputerPlayer.stop=true;
         int choice= MyDialog.confirmDialog("游戏结束！",(pl.getColor().equals(Color.BLACK)? "黑方":"红方")+" 赢了！","菜单","重开");
         if(choice==1){//菜单
@@ -167,7 +177,8 @@ public class ClickController {
             gamePanel.remove(PVCButtonsPanel);
             Handler.mainFrame.setContentPane(ChessGameFrame.menuPanel);
         }
-        else {
+        else
+        {
             chessboard.initAllChessOnBoard(0);//restart!
             ChessGameFrame.repaintAll();
             computerPlayer=new ComputerPlayer();

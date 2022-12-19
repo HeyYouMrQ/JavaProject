@@ -3,6 +3,7 @@ package chessComponent;
 import controller.ClickController;
 import model.ChessColor;
 import model.ChessboardPoint;
+import view.ChessGameFrame;
 import view.Chessboard;
 
 import javax.swing.*;
@@ -111,7 +112,9 @@ public abstract class SquareComponent extends JComponent {
         super.processMouseEvent(e);
         if (e.getID() == MouseEvent.MOUSE_PRESSED) {
             //System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-            clickController.onClick(this);
+            if(!(ChessGameFrame.menuMode==1
+                    && !ChessGameFrame.chessboard.getCurrentColor().equals(ChessGameFrame.chessboard.mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK)))
+                clickController.onClick(this);
         }
         if (e.getID() == MouseEvent.MOUSE_ENTERED && !(this instanceof EmptySlotComponent)) {//todo 加的，源码没有
             if(isCheatingMode)
