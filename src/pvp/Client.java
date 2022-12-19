@@ -25,6 +25,11 @@ public class Client extends JFrame
     {
         oppoUser = (String) user_list.getSelectedValue();
         send(6,user);
+        pvpPlayerListPanel.setVisible(false);
+        pvpPlayerListPanel.setEnabled(false);
+        gamePanel.setEnabled(true);
+        gamePanel.setVisible(true);
+        mainFrame.setContentPane(gamePanel);
     }
     public boolean contendForFirst()
     {
@@ -90,6 +95,9 @@ public class Client extends JFrame
                     {
                         oppoUser=info.substring(4);
                         pvpPlayerListPanel.setVisible(false);
+                        pvpPlayerListPanel.setEnabled(false);
+                        gamePanel.setEnabled(true);
+                        gamePanel.setVisible(true);
                         mainFrame.setContentPane(gamePanel);
                     }
                     else if (info.startsWith("usr:"))

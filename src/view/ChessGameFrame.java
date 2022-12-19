@@ -228,8 +228,6 @@ public class ChessGameFrame extends JFrame {
            // PVPButtonsPanel.setEnabled(true);
            // PVPButtonsPanel.setVisible(true);
            // gamePanel.add(PVPButtonsPanel,JLayeredPane.MODAL_LAYER);
-            gamePanel.setEnabled(true);
-            gamePanel.setVisible(true);
         });
     }
     private void addMenuExitButton() {
@@ -269,6 +267,10 @@ public class ChessGameFrame extends JFrame {
         pvpPlayerListPanel.setLocation(0,0);
         pvpPlayerListPanel.setLayout(null);
         pvpPlayerListPanel.setVisible(true);
+        JComponent imageComponent = new ImageComponent(MENU);// create an instance of ImageComponent
+        imageComponent.setSize(WIDTH,HEIGHT);
+        imageComponent.setLocation(0, 0); // set absolute location
+        pvpPlayerListPanel.add(imageComponent,JLayeredPane.FRAME_CONTENT_LAYER);
 
         JButton button = new JButton("连接");
         button.setSize(WIDTH/5,HEIGHT/5);
@@ -284,11 +286,6 @@ public class ChessGameFrame extends JFrame {
         scrollPane_1.setSize(WIDTH/2,HEIGHT/2);
         scrollPane_1.setLocation(WIDTH/10,HEIGHT/10);
         pvpPlayerListPanel.add(scrollPane_1,JLayeredPane.MODAL_LAYER);
-
-        JComponent imageComponent = new ImageComponent(MENU);// create an instance of ImageComponent
-        imageComponent.setSize(WIDTH,HEIGHT);
-        imageComponent.setLocation(0, 0); // set absolute location
-        pvpPlayerListPanel.add(imageComponent,JLayeredPane.FRAME_CONTENT_LAYER);
     }
     private void loadGamePanel()
     {
