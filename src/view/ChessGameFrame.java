@@ -162,8 +162,8 @@ public class ChessGameFrame extends JFrame {
         {
             for(int j=0;j<=3;j++)
             {
-                boolean isRED=Character.isUpperCase(elements[j].charAt(0));
-                char tmp=Character.toLowerCase(elements[j].charAt(0));
+                boolean isRED=Character.isUpperCase(elements[i].charAt(j));
+                char tmp=Character.toLowerCase(elements[i].charAt(j));
                 switch (tmp)
                 {
                     case 'g':
