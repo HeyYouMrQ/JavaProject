@@ -155,7 +155,7 @@ public class ChessGameFrame extends JFrame {
         else
             chessboard.mePlayer=chessboard.blackPlayer;
     }
-    private static void initPVP()
+    public static void initPVP()
     {
         String[] elements={"mSMs","Ccvs","vVhh","MGSS","HCaa","VsSs","mHAs","cASg"};
         for(int i=0;i<=7;i++)//初始棋盘：红大写黑小写，gamvhsce将士相车马兵炮空,v for vehicle
@@ -218,9 +218,6 @@ public class ChessGameFrame extends JFrame {
             menuMode =1;
             client.send(5,user);
             loadPVPPlayerListPanel();
-            initPVP();//todo 偷懒惹
-            addCapturingBoard();
-            ChessGameFrame.repaintAll();
            // PVPButtonsPanel.setEnabled(true);
            // PVPButtonsPanel.setVisible(true);
            // gamePanel.add(PVPButtonsPanel,JLayeredPane.MODAL_LAYER);
@@ -315,7 +312,7 @@ public class ChessGameFrame extends JFrame {
         chessboard.setLocation(WIDTH / 5, HEIGHT / 5);
         gamePanel.add(chessboard);
     }
-    private void addCapturingBoard()
+    public void addCapturingBoard()
     {//player:0红1黑
         chessboard.capturingBoardHe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
                 chessboard.mePlayer.getColor().equals(Color.RED)?0:1);

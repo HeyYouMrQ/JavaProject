@@ -1,5 +1,7 @@
 package pvp;
 
+import view.ChessGameFrame;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +27,9 @@ public class Client extends JFrame
     {
         oppoUser = (String) user_list.getSelectedValue();
         send(6,user);
+        initPVP();//todo 偷懒惹
+        mainFrame.addCapturingBoard();
+        ChessGameFrame.repaintAll();
         pvpPlayerListPanel.setVisible(false);
         pvpPlayerListPanel.setEnabled(false);
         gamePanel.setEnabled(true);
@@ -94,6 +99,9 @@ public class Client extends JFrame
                     else if(info.startsWith("lnk:"))
                     {
                         oppoUser=info.substring(4);
+                        initPVP();//todo 偷懒惹
+                        mainFrame.addCapturingBoard();
+                        ChessGameFrame.repaintAll();
                         pvpPlayerListPanel.setVisible(false);
                         pvpPlayerListPanel.setEnabled(false);
                         gamePanel.setEnabled(true);
