@@ -279,8 +279,6 @@ public class ChessGameFrame extends JFrame {
             }
         });
         pvpPlayerListPanel.add(button,JLayeredPane.MODAL_LAYER);
-
-
         JScrollPane scrollPane_1 = new JScrollPane();
         scrollPane_1.setViewportView(client.user_list);
         scrollPane_1.setSize(WIDTH/2,HEIGHT/2);

@@ -23,6 +23,7 @@ public class Client extends JFrame
     }
     public void link()
     {
+        oppoUser = (String) user_list.getSelectedValue();
         send(6,user);
     }
     public boolean contendForFirst()
@@ -127,7 +128,7 @@ public class Client extends JFrame
         else if(mode==5)
             msg="usr:"+user;
         else if(mode==6)
-            msg="lnk:"+info;
+            msg="lnk:From:"+user+"To:"+receiveUserName;
 
         out.println(msg);// 发送信息
         out.flush();// 刷新输出缓冲区
