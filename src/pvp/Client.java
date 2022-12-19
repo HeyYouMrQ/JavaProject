@@ -83,15 +83,15 @@ public class Client extends JFrame
                     String info = in.readLine().trim();// 读取信息
                     if (info.equals("csb:"))//未开发
                         handleIniCsb(info.substring(4));
-                    else if (info.equals("stp:"))
+                    else if (info.startsWith("stp:"))
                         handleStep(info.substring(4));
-                    else if(info.equals("lnk:"))
+                    else if(info.startsWith("lnk:"))
                     {
                         oppoUser=info.substring(4);
                         pvpPlayerListPanel.setVisible(false);
                         mainFrame.setContentPane(gamePanel);
                     }
-                    else if (info.equals("usr:"))
+                    else if (info.startsWith("usr:"))
                     {
                         boolean itemFlag = false;// 标记是否为列表框添加列表项，为true不添加，为false添加
                         for (int i = 0; i < model.getSize(); i++)

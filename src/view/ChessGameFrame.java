@@ -280,9 +280,12 @@ public class ChessGameFrame extends JFrame {
         });
         pvpPlayerListPanel.add(button,JLayeredPane.MODAL_LAYER);
 
-        client.user_list.setSize(WIDTH/2,HEIGHT/2);
-        client.user_list.setLocation(WIDTH/10,HEIGHT/10);
-        pvpPlayerListPanel.add(client.user_list,JLayeredPane.MODAL_LAYER);
+
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setViewportView(client.user_list);
+        scrollPane_1.setSize(WIDTH/2,HEIGHT/2);
+        scrollPane_1.setLocation(WIDTH/10,HEIGHT/10);
+        pvpPlayerListPanel.add(scrollPane_1,JLayeredPane.MODAL_LAYER);
 
         JComponent imageComponent = new ImageComponent(MENU);// create an instance of ImageComponent
         imageComponent.setSize(WIDTH,HEIGHT);
