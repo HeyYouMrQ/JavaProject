@@ -36,7 +36,7 @@ public class ClickController {
         chessboard.firX.push(fir.getChessboardPoint().getX()); chessboard.firY.push(fir.getChessboardPoint().getY());
         chessboard.secCom.push(-1);   chessboard.secCol.push(-1);   chessboard.secX.push(-1); chessboard.secY.push(-1); chessboard.firCannonSecRev.push(-1);
         chessboard.capturingIsMe.push(-1);chessboard.capturingLabel.push(-1);
-        if(ComputerPlayer.stop)
+        if(ComputerPlayer.stop && chessboard==ChessGameFrame.chessboard)
         {
             withdrawButton.setEnabled(true);
             withdrawButton.setIcon(WithdrawOnIcon);
@@ -51,7 +51,7 @@ public class ClickController {
         chessboard.secX.push(sec.getChessboardPoint().getX()); chessboard.secY.push(sec.getChessboardPoint().getY());
         chessboard.firCannonSecRev.push(rev);
         chessboard.capturingIsMe.push(meIsEaten);chessboard.capturingLabel.push(label);
-        if(ComputerPlayer.stop)
+        if(ComputerPlayer.stop && chessboard==ChessGameFrame.chessboard)
         {
             withdrawButton.setEnabled(true);
             withdrawButton.setIcon(WithdrawOnIcon);
