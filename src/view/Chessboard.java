@@ -149,8 +149,8 @@ public class Chessboard extends JComponent {
 
         if(this==ChessGameFrame.chessboard)
         {
-            gamePanel.add(capturingBoardHe);
-            gamePanel.add(capturingBoardMe);
+            gamePanel.add(capturingBoardHe,JLayeredPane.MODAL_LAYER);
+            gamePanel.add(capturingBoardMe,JLayeredPane.MODAL_LAYER);
         }
     }
     public void initAllChessOnBoard(int mode) {//0重开1按指定的initComponents初始化但不载入
@@ -173,7 +173,16 @@ public class Chessboard extends JComponent {
             initComponents =initRandomizedChessOnBoard();
         }
         if(menuMode ==1)
+        {
+            withdrawButton.setEnabled(false);
+            withdrawButton.setIcon(WithdrawOffIcon);
+            cheatingButton.setIcon(CheatOffIcon);
+            isCheatingMode=false;
+            currentColor = ChessColor.RED;
+            redPlayer.setCurrentScore(0);
+            blackPlayer.setCurrentScore(0);
             ChessGameFrame.contendFirstInPVP();
+        }
         addCapturingBoard();
         if(mode==1 && menuMode!=1)
         {

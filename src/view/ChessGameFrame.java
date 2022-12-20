@@ -309,7 +309,7 @@ public class ChessGameFrame extends JFrame {
         chessboard = new Chessboard(CHESSBOARD_SIZE/2,CHESSBOARD_SIZE);
         gameController = new GameController();
         chessboard.setLocation(WIDTH / 5, HEIGHT / 5);
-        gamePanel.add(chessboard);
+        gamePanel.add(chessboard,JLayeredPane.MODAL_LAYER);
     }
 
     /**

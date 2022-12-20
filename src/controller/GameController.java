@@ -7,6 +7,7 @@ import model.ChessColor;
 import view.ChessGameFrame;
 import view.Chessboard;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -48,9 +49,9 @@ public class GameController {
         chessboard.setLocation(mainFrame.WIDTH / 5, mainFrame.HEIGHT / 5);
         chessboard.capturingBoardHe.setLocation(mainFrame.WIDTH/5 - mainFrame.CHESSBOARD_SIZE/8, mainFrame.HEIGHT / 4);
         chessboard.capturingBoardMe.setLocation(mainFrame.WIDTH/5 + mainFrame.CHESSBOARD_SIZE/2, mainFrame.HEIGHT / 4);//自己放在右边
-        ChessGameFrame.gamePanel.add(chessboard);
-        gamePanel.add(chessboard.capturingBoardHe);
-        gamePanel.add(chessboard.capturingBoardMe);
+        ChessGameFrame.gamePanel.add(chessboard, JLayeredPane.MODAL_LAYER);
+        gamePanel.add(chessboard.capturingBoardHe,JLayeredPane.MODAL_LAYER);
+        gamePanel.add(chessboard.capturingBoardMe,JLayeredPane.MODAL_LAYER);
         repaintAll();
     }
     private boolean checkValid()//演化尝试
