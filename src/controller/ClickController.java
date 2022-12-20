@@ -179,8 +179,10 @@ public class ClickController {
         }
         else
         {
+            ComputerPlayer.stop=true;
             chessboard.initAllChessOnBoard(0);//restart!
             ChessGameFrame.repaintAll();
+            ComputerPlayer.stop=false;
             computerPlayer=new ComputerPlayer();
             computerPlayer.start();
         }

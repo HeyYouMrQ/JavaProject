@@ -156,6 +156,7 @@ public class ComputerPlayer extends Thread
     public void run() {
         if(computerStop)
             return;
+        else stop=false;
         withdrawButton.setEnabled(false);
         withdrawButton.setIcon(WithdrawOffIcon);
         while (true)
@@ -163,7 +164,7 @@ public class ComputerPlayer extends Thread
             if (stop || computerStop) break;
             if(chessboard.getCurrentColor()!=(chessboard.mePlayer.getColor().equals(Color.RED)? ChessColor.RED:ChessColor.BLACK))
                 handlePlay();
-            try {sleep(20);} catch (InterruptedException ex) {}
+            try {sleep(200);} catch (InterruptedException ex) {}
         }
         if(!chessboard.ope.empty())
         {

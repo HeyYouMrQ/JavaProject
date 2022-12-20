@@ -28,7 +28,6 @@ public class Client extends JFrame
         oppoUser = (String) user_list.getSelectedValue();
         send(6,user);
         initPVP();//todo 偷懒惹
-        mainFrame.addCapturingBoard();
         ChessGameFrame.repaintAll();
         pvpPlayerListPanel.setVisible(false);
         pvpPlayerListPanel.setEnabled(false);
@@ -100,7 +99,6 @@ public class Client extends JFrame
                     {
                         oppoUser=info.substring(4);
                         initPVP();//todo 偷懒惹
-                        mainFrame.addCapturingBoard();
                         ChessGameFrame.repaintAll();
                         pvpPlayerListPanel.setVisible(false);
                         pvpPlayerListPanel.setEnabled(false);

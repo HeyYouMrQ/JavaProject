@@ -133,6 +133,26 @@ public class Chessboard extends JComponent {
                 ret[i][j]=tmpList.get(i*COL_SIZE+j);
         return ret;
     }
+    public void addCapturingBoard()
+    {//player:0红1黑
+        if(capturingBoardHe!=null)
+            gamePanel.remove(capturingBoardHe);
+        if(capturingBoardMe!=null)
+            gamePanel.remove(capturingBoardMe);
+        capturingBoardHe = new CapturingBoard(mainFrame.CHESSBOARD_SIZE/8,mainFrame.CHESSBOARD_SIZE*7/8,
+                mePlayer.getColor().equals(Color.RED)?0:1);
+        capturingBoardMe = new CapturingBoard(mainFrame.CHESSBOARD_SIZE/8,mainFrame.CHESSBOARD_SIZE*7/8,
+                mePlayer.getColor().equals(Color.RED)?1:0);
+
+        capturingBoardHe.setLocation(mainFrame.WIDTH/5 - mainFrame.CHESSBOARD_SIZE/8, mainFrame.HEIGHT / 4);
+        capturingBoardMe.setLocation(mainFrame.WIDTH/5 + mainFrame.CHESSBOARD_SIZE/2, mainFrame.HEIGHT / 4);//自己放在右边
+
+        if(this==ChessGameFrame.chessboard)
+        {
+            gamePanel.add(capturingBoardHe);
+            gamePanel.add(capturingBoardMe);
+        }
+    }
     public void initAllChessOnBoard(int mode) {//0重开1按指定的initComponents初始化但不载入
         if(mode==0)
         {
@@ -150,16 +170,11 @@ public class Chessboard extends JComponent {
             blackPlayer.setCurrentScore(0);
             if(menuMode ==0)
                 ChessGameFrame.contendFirstInPVC(0);
-            else if(menuMode ==1)
-                ChessGameFrame.contendFirstInPVP();
             initComponents =initRandomizedChessOnBoard();
         }
         if(menuMode ==1)
             ChessGameFrame.contendFirstInPVP();
-        if(capturingBoardHe!=null)
-            capturingBoardHe.initAllCapturingChessOnBoard(mePlayer.getColor().equals(Color.RED) ?0:1);
-        if(capturingBoardMe!=null)
-            capturingBoardMe.initAllCapturingChessOnBoard(mePlayer.getColor().equals(Color.RED)?1:0);
+        addCapturingBoard();
         if(mode==1)
         {
             for(int i=0;i<=6;i++)

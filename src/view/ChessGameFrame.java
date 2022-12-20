@@ -133,7 +133,6 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener(e -> {
             menuMode =0;
             chessboard.initAllChessOnBoard(0);
-            addCapturingBoard();
             ChessGameFrame.repaintAll();
 
             menuPanel.setEnabled(false);
@@ -312,19 +311,7 @@ public class ChessGameFrame extends JFrame {
         chessboard.setLocation(WIDTH / 5, HEIGHT / 5);
         gamePanel.add(chessboard);
     }
-    public void addCapturingBoard()
-    {//player:0红1黑
-        chessboard.capturingBoardHe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
-                chessboard.mePlayer.getColor().equals(Color.RED)?0:1);
-        chessboard.capturingBoardMe = new CapturingBoard(CHESSBOARD_SIZE/8,CHESSBOARD_SIZE*7/8,
-                chessboard.mePlayer.getColor().equals(Color.RED)?1:0);
 
-        chessboard.capturingBoardHe.setLocation(WIDTH/5 - CHESSBOARD_SIZE/8, HEIGHT / 4);
-        chessboard.capturingBoardMe.setLocation(WIDTH/5 + CHESSBOARD_SIZE/2, HEIGHT / 4);//自己放在右边
-
-        gamePanel.add(chessboard.capturingBoardHe);
-        gamePanel.add(chessboard.capturingBoardMe);
-    }
     /**
      * 在游戏窗体中添加标签
      */
