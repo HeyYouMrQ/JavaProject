@@ -175,7 +175,7 @@ public class Chessboard extends JComponent {
         if(menuMode ==1)
             ChessGameFrame.contendFirstInPVP();
         addCapturingBoard();
-        if(mode==1)
+        if(mode==1 && menuMode!=1)
         {
             for(int i=0;i<=6;i++)
             {
@@ -208,7 +208,7 @@ public class Chessboard extends JComponent {
 
                 squareComponent.setVisible(true);
                 putChessOnBoard(squareComponent);
-                if(mode==1)
+                if(mode==1 && menuMode!=1)
                     squareComponent.setReversal(isRever[i][j]);
             }
         }
