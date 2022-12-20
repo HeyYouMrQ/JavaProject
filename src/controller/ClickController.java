@@ -68,7 +68,7 @@ public class ClickController {
         {
             if(!squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
             {//翻开
-                if(menuMode==1)
+                if(menuMode==1 && ChessGameFrame.chessboard.getCurrentColor().equals(ChessGameFrame.chessboard.mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK))
                     client.work(1,squareComponent.getChessboardPoint().getX(),
                             squareComponent.getChessboardPoint().getY(),0,0);
                 recordWithdraw(squareComponent);
@@ -97,7 +97,7 @@ public class ClickController {
             }
             else if (handleSecond(squareComponent))
             {//能吃的、能移动到空格子的就做
-                if(menuMode==1)
+                if(menuMode==1 && ChessGameFrame.chessboard.getCurrentColor().equals(ChessGameFrame.chessboard.mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK))
                     client.work(2,first.getChessboardPoint().getX(), first.getChessboardPoint().getY()
                             ,squareComponent.getChessboardPoint().getX(), squareComponent.getChessboardPoint().getY());
                 if(squareComponent.label!=7)
@@ -121,7 +121,7 @@ public class ClickController {
             }
             else if(!isComputerOperating() && !squareComponent.isReversal() && !(squareComponent instanceof EmptySlotComponent))
             {//翻过来(为了观感体验，机器不允许这样)
-                if(menuMode==1)
+                if(menuMode==1 && ChessGameFrame.chessboard.getCurrentColor().equals(ChessGameFrame.chessboard.mePlayer.getColor().equals(Color.RED)?ChessColor.RED:ChessColor.BLACK))
                     client.work(1,squareComponent.getChessboardPoint().getX(),
                             squareComponent.getChessboardPoint().getY(),0,0);
                 recordWithdraw(squareComponent);
