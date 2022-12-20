@@ -17,7 +17,7 @@ public class Main {
 }
 //问题:网络
 /**
- *yfhtdgtdg
+ *yrger
  * 待实现：
  * 对话框、背景美化
  * 字体美化：隶书
